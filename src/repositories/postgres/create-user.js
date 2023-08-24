@@ -17,6 +17,6 @@ export class PostgresCreateUserRepository {
       [createUserParams.id]
     );
 
-    return createdUser[0];
+    return createdUser?.[0];
   }
 }
