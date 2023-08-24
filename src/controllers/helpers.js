@@ -5,7 +5,7 @@ export const created = body => {
   };
 };
 
-export const sucess = body => {
+export const success = body => {
   return {
     statusCode: 200,
     body
