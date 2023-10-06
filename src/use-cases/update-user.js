@@ -7,10 +7,10 @@ export class UpdateUserUseCase {
   async updateUser(userId, updateUserParams) {
     if (updateUserParams.email) {
       const postgresGetUserByEmail = new PostgresGetUserByEmail();
-      const isEmailAlreadyInUse = await postgresGetUserByEmail.getUserByEmail(
+      const userWithProvidedEmail = await postgresGetUserByEmail.getUserByEmail(
         updateUserParams.email
       );
-      if (isEmailAlreadyInUse) {
+      if (userWithProvidedEmail && userWithProvidedEmail.id !== userId) {
         throw new EmailAlreadyInUseError(updateUserParams.email);
       }
     }
