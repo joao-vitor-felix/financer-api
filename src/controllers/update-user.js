@@ -6,8 +6,7 @@ import {
   success
 } from "./helpers.js";
 import { UpdateUserUseCase } from "../use-cases/update-user.js";
-import { GetUserByIdUseCase } from "../use-cases/get-user-by-id.js";
-import { EmailAlreadyInUseError } from "../errors/user.js";
+import { EmailAlreadyInUseError, UserNotFoundError } from "../errors/user.js";
 
 export class UpdateUserController {
   async updateUser(httpRequest) {
@@ -20,14 +19,6 @@ export class UpdateUserController {
 
       if (!isUUID) {
         return badRequest({ message: "Invalid ID." });
-      }
-
-      const getUserByIdUseCase = new GetUserByIdUseCase();
-
-      const userReturned = await getUserByIdUseCase.getUserById(userId);
-
-      if (!userReturned) {
-        return notFound({ message: "User not found." });
       }
 
       const allowedFields = ["first_name", "last_name", "email", "password"];
@@ -72,6 +63,10 @@ export class UpdateUserController {
     } catch (error) {
       if (error instanceof EmailAlreadyInUseError) {
         return badRequest({ message: error.message });
+      }
+
+      if (error instanceof UserNotFoundError) {
+        return notFound({ message: error.message });
       }
 
       console.error(error);

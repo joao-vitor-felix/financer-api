@@ -1,10 +1,19 @@
 import bcrypt from "bcrypt";
-import { EmailAlreadyInUseError } from "../errors/user.js";
+import { EmailAlreadyInUseError, UserNotFoundError } from "../errors/user.js";
 import { PostgresGetUserByEmail } from "../repositories/postgres/get-user-by-email.js";
 import { PostgresUpdateUserRepository } from "../repositories/postgres/update-user.js";
+import { GetUserByIdUseCase } from "../use-cases/get-user-by-id.js";
 
 export class UpdateUserUseCase {
   async updateUser(userId, updateUserParams) {
+    const getUserByIdUseCase = new GetUserByIdUseCase();
+
+    const userReturned = await getUserByIdUseCase.getUserById(userId);
+
+    if (!userReturned) {
+      throw new UserNotFoundError(userId);
+    }
+
     if (updateUserParams.email) {
       const postgresGetUserByEmail = new PostgresGetUserByEmail();
       const userWithProvidedEmail = await postgresGetUserByEmail.getUserByEmail(
