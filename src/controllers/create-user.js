@@ -1,34 +1,40 @@
-import validator from "validator";
-import { CreateUserUseCase } from "../use-cases/create-user.js";
-import { badRequest, created, internalServerError } from "./helpers.js";
+import { CreateUserUseCase } from "../use-cases/index.js";
+import {
+  badRequest,
+  created,
+  internalServerError,
+  checkIfPasswordIsValid,
+  invalidPasswordResponse,
+  checkIfEmailIsValid,
+  invalidEmailResponse
+} from "./helpers/index.js";
 import { EmailAlreadyInUseError } from "../errors/user.js";
 
 export class CreateUserController {
   async createUser(httpRequest) {
     try {
-      const { body } = httpRequest;
+      const params = httpRequest.body;
       const requiredFields = ["first_name", "last_name", "email", "password"];
 
       for (const field of requiredFields) {
-        if (!body[field] || body[field].trim().length === 0) {
+        if (!params[field] || params[field].trim().length === 0) {
           return badRequest({ message: `Missing param: ${field}.` });
         }
       }
 
-      const isValidPassword = body.password.length < 6;
+      const isPasswordValid = checkIfPasswordIsValid(params.password);
 
-      if (isValidPassword) {
-        return badRequest({
-          message: "Password must be at least 6 characters."
-        });
+      if (isPasswordValid) {
+        return invalidPasswordResponse();
       }
 
-      const isEmailValid = validator.isEmail(body.email);
+      const isEmailValid = checkIfEmailIsValid(params.email);
+
       if (!isEmailValid) {
-        return badRequest({ message: "Invalid email." });
+        return invalidEmailResponse();
       }
 
-      const { first_name, last_name, email, password } = body;
+      const { first_name, last_name, email, password } = params;
       const createUserUseCase = new CreateUserUseCase();
       const userReturned = await createUserUseCase.createUser({
         first_name,
