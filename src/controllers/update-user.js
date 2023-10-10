@@ -1,11 +1,16 @@
-import validator from "validator";
 import {
   badRequest,
   internalServerError,
   notFound,
-  success
-} from "./helpers.js";
-import { UpdateUserUseCase } from "../use-cases/update-user.js";
+  success,
+  checkIfIdIsValid,
+  invalidEmailResponse,
+  invalidIdResponse,
+  checkIfEmailIsValid,
+  checkIfPasswordIsValid,
+  invalidPasswordResponse
+} from "./helpers/index.js";
+import { UpdateUserUseCase } from "../use-cases/index.js";
 import { EmailAlreadyInUseError, UserNotFoundError } from "../errors/user.js";
 
 export class UpdateUserController {
@@ -13,17 +18,17 @@ export class UpdateUserController {
     try {
       const userId = httpRequest.params.userId;
 
-      const updateUserParams = httpRequest.body;
+      const params = httpRequest.body;
 
-      const isUUID = validator.isUUID(userId);
+      const isUUID = checkIfIdIsValid(userId);
 
       if (!isUUID) {
-        return badRequest({ message: "Invalid ID." });
+        return invalidIdResponse();
       }
 
       const allowedFields = ["first_name", "last_name", "email", "password"];
 
-      const someFieldIsNotAllowed = Object.keys(updateUserParams).some(
+      const someFieldIsNotAllowed = Object.keys(params).some(
         field => !allowedFields.includes(field)
       );
 
@@ -33,28 +38,23 @@ export class UpdateUserController {
         });
       }
 
-      if (updateUserParams.email) {
-        const isEmailValid = validator.isEmail(updateUserParams.email);
+      if (params.email) {
+        const isEmailValid = checkIfEmailIsValid(params.email);
         if (!isEmailValid) {
-          return badRequest({ message: "Invalid email." });
+          return invalidEmailResponse();
         }
       }
 
-      if (updateUserParams.password) {
-        const isValidPassword = updateUserParams.password.length < 6;
+      if (params.password) {
+        const isValidPassword = checkIfPasswordIsValid(params.password);
 
         if (isValidPassword) {
-          return badRequest({
-            message: "Password must be at least 6 characters."
-          });
+          return invalidPasswordResponse();
         }
       }
 
       const updateUserUseCase = new UpdateUserUseCase();
-      const updatedUser = await updateUserUseCase.updateUser(
-        userId,
-        updateUserParams
-      );
+      const updatedUser = await updateUserUseCase.updateUser(userId, params);
 
       return success({
         message: "User updated successfully.",
