@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { EmailAlreadyInUseError, UserNotFoundError } from "../errors/user.js";
 import {
-  PostgresGetUserByEmail,
+  PostgresGetUserByEmailRepository,
   PostgresUpdateUserRepository
 } from "../repositories/postgres/index.js";
 import { GetUserByIdUseCase } from "../use-cases/index.js";
@@ -17,7 +17,7 @@ export class UpdateUserUseCase {
     }
 
     if (updateUserParams.email) {
-      const postgresGetUserByEmail = new PostgresGetUserByEmail();
+      const postgresGetUserByEmail = new PostgresGetUserByEmailRepository();
       const userWithProvidedEmail = await postgresGetUserByEmail.getUserByEmail(
         updateUserParams.email
       );
