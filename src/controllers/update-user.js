@@ -48,7 +48,7 @@ export class UpdateUserController {
       if (params.password) {
         const isValidPassword = checkIfPasswordIsValid(params.password);
 
-        if (isValidPassword) {
+        if (!isValidPassword) {
           return invalidPasswordResponse();
         }
       }
