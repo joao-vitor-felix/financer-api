@@ -1,10 +1,11 @@
+import { UserNotFoundError } from "../errors/user.js";
 import { GetUserByIdUseCase } from "../use-cases/index.js";
 import {
   checkIfIdIsValid,
   invalidIdResponse,
   internalServerError,
-  notFound,
-  success
+  success,
+  notFound
 } from "./helpers/index.js";
 
 export class GetUserByIdController {
@@ -23,7 +24,7 @@ export class GetUserByIdController {
       const userReturned = await getUserByIdUseCase.getUserById(userId);
 
       if (!userReturned) {
-        return notFound({ message: "User not found." });
+        throw new UserNotFoundError(userId);
       }
 
       return success({
@@ -32,6 +33,10 @@ export class GetUserByIdController {
       });
     } catch (error) {
       console.log(error);
+
+      if (error instanceof UserNotFoundError) {
+        return notFound({ message: error.message });
+      }
       return internalServerError();
     }
   }
