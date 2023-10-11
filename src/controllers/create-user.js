@@ -24,7 +24,7 @@ export class CreateUserController {
 
       const isPasswordValid = checkIfPasswordIsValid(params.password);
 
-      if (isPasswordValid) {
+      if (!isPasswordValid) {
         return invalidPasswordResponse();
       }
 
