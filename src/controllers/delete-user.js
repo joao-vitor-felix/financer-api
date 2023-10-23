@@ -1,5 +1,4 @@
 import { UserNotFoundError } from "../errors/user.js";
-import { DeleteUserUseCase } from "../use-cases/index.js";
 import {
   checkIfIdIsValid,
   invalidIdResponse,
@@ -9,6 +8,10 @@ import {
 } from "./helpers/index.js";
 
 export class DeleteUserController {
+  constructor(deleteUserUseCase) {
+    this.deleteUserUseCase = deleteUserUseCase;
+  }
+
   async deleteUser(httpRequest) {
     try {
       const userId = httpRequest.params.userId;
@@ -19,8 +22,7 @@ export class DeleteUserController {
         return invalidIdResponse();
       }
 
-      const deleteUserUseCase = new DeleteUserUseCase();
-      const userDeleted = await deleteUserUseCase.deleteUser(userId);
+      const userDeleted = await this.deleteUserUseCase.deleteUser(userId);
 
       return success({
         message: "User deleted successfully.",

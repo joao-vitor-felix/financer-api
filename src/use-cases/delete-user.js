@@ -1,18 +1,19 @@
 import { UserNotFoundError } from "../errors/user.js";
-import { PostgresDeleteUserRepository } from "../repositories/postgres/index.js";
-import { GetUserByIdUseCase } from "./index.js";
 
 export class DeleteUserUseCase {
+  constructor(deleteUserRepository, getUserByIdUseCase) {
+    this.deleteUserRepository = deleteUserRepository;
+    this.getUserByIdUseCase = getUserByIdUseCase;
+  }
+
   async deleteUser(id) {
-    const getUserByIdUseCase = new GetUserByIdUseCase();
-    const user = await getUserByIdUseCase.getUserById(id);
+    const user = await this.getUserByIdUseCase.getUserById(id);
 
     if (!user) {
       throw new UserNotFoundError(id);
     }
 
-    const postgresDeleteUserRepository = new PostgresDeleteUserRepository();
-    const userDeleted = await postgresDeleteUserRepository.deleteUser(id);
+    const userDeleted = await this.deleteUserRepository.deleteUser(id);
 
     return userDeleted;
   }
