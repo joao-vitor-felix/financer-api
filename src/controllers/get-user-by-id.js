@@ -1,5 +1,4 @@
 import { UserNotFoundError } from "../errors/user.js";
-import { GetUserByIdUseCase } from "../use-cases/index.js";
 import {
   checkIfIdIsValid,
   invalidIdResponse,
@@ -9,6 +8,9 @@ import {
 } from "./helpers/index.js";
 
 export class GetUserByIdController {
+  constructor(getUserByIdUseCase) {
+    this.getUserByIdUseCase = getUserByIdUseCase;
+  }
   async getUserById(httpRequest) {
     const userId = httpRequest.params.userId;
 
@@ -19,9 +21,7 @@ export class GetUserByIdController {
         return invalidIdResponse();
       }
 
-      const getUserByIdUseCase = new GetUserByIdUseCase();
-
-      const userReturned = await getUserByIdUseCase.getUserById(userId);
+      const userReturned = await this.getUserByIdUseCase.getUserById(userId);
 
       if (!userReturned) {
         throw new UserNotFoundError(userId);
