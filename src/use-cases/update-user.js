@@ -1,26 +1,28 @@
 import bcrypt from "bcrypt";
 import { EmailAlreadyInUseError, UserNotFoundError } from "../errors/user.js";
-import {
-  PostgresGetUserByEmailRepository,
-  PostgresUpdateUserRepository
-} from "../repositories/postgres/index.js";
-import { GetUserByIdUseCase } from "../use-cases/index.js";
 
 export class UpdateUserUseCase {
+  constructor(
+    getUserByIdUseCase,
+    getUserByEmailRepository,
+    updateUserRepository
+  ) {
+    this.getUserByIdUseCase = getUserByIdUseCase;
+    this.getUserByEmailRepository = getUserByEmailRepository;
+    this.updateUserRepository = updateUserRepository;
+  }
   async updateUser(userId, updateUserParams) {
-    const getUserByIdUseCase = new GetUserByIdUseCase();
-
-    const userReturned = await getUserByIdUseCase.getUserById(userId);
+    const userReturned = await this.getUserByIdUseCase.getUserById(userId);
 
     if (!userReturned) {
       throw new UserNotFoundError(userId);
     }
 
     if (updateUserParams.email) {
-      const postgresGetUserByEmail = new PostgresGetUserByEmailRepository();
-      const userWithProvidedEmail = await postgresGetUserByEmail.getUserByEmail(
-        updateUserParams.email
-      );
+      const userWithProvidedEmail =
+        await this.getUserByEmailRepository.getUserByEmail(
+          updateUserParams.email
+        );
       if (userWithProvidedEmail && userWithProvidedEmail.id !== userId) {
         throw new EmailAlreadyInUseError(updateUserParams.email);
       }
@@ -33,8 +35,7 @@ export class UpdateUserUseCase {
       user.password = hashedPassword;
     }
 
-    const postgresUpdateUserUseCase = new PostgresUpdateUserRepository();
-    const updatedUser = await postgresUpdateUserUseCase.updateUser(
+    const updatedUser = await this.updateUserRepository.updateUser(
       userId,
       user
     );

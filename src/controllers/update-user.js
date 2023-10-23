@@ -10,10 +10,12 @@ import {
   checkIfPasswordIsValid,
   invalidPasswordResponse
 } from "./helpers/index.js";
-import { UpdateUserUseCase } from "../use-cases/index.js";
 import { EmailAlreadyInUseError, UserNotFoundError } from "../errors/user.js";
 
 export class UpdateUserController {
+  constructor(updateUserUseCase) {
+    this.updateUserUseCase = updateUserUseCase;
+  }
   async updateUser(httpRequest) {
     try {
       const userId = httpRequest.params.userId;
@@ -53,8 +55,10 @@ export class UpdateUserController {
         }
       }
 
-      const updateUserUseCase = new UpdateUserUseCase();
-      const updatedUser = await updateUserUseCase.updateUser(userId, params);
+      const updatedUser = await this.updateUserUseCase.updateUser(
+        userId,
+        params
+      );
 
       return success({
         message: "User updated successfully.",
