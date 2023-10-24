@@ -24,7 +24,7 @@ export class CreateTransactionController {
         }
       }
 
-      const isUUID = checkIfIdIsValid(params.id);
+      const isUUID = checkIfIdIsValid(params.user_id);
 
       if (!isUUID) {
         return invalidIdResponse();
