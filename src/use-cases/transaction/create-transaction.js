@@ -8,7 +8,7 @@ export class CreateTransactionUseCase {
   }
 
   async createTransaction(createTransactionParams) {
-    const userId = createTransactionParams.userId;
+    const userId = createTransactionParams.user_id;
 
     const user = this.getUserByIdRepository.getUserById(userId);
 
