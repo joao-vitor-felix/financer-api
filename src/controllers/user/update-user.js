@@ -9,8 +9,11 @@ import {
   checkIfEmailIsValid,
   checkIfPasswordIsValid,
   invalidPasswordResponse
-} from "./helpers/index.js";
-import { EmailAlreadyInUseError, UserNotFoundError } from "../errors/user.js";
+} from "../helpers/index.js";
+import {
+  EmailAlreadyInUseError,
+  UserNotFoundError
+} from "../../errors/user.js";
 
 export class UpdateUserController {
   constructor(updateUserUseCase) {
