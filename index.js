@@ -42,7 +42,7 @@ app.post("/api/transactions", async (request, response) => {
   const createTransactionController = makeCreateTransactionController();
 
   const { statusCode, body } =
-    await createTransactionController.execute(request);
+    await createTransactionController.createTransaction(request);
 
   response.status(statusCode).send(body);
 });
