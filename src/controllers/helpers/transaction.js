@@ -1,5 +1,5 @@
 import validator from "validator";
-import { badRequest } from "./http";
+import { badRequest, notFound } from "./index.js";
 
 export const isAmountValidCheck = amount =>
   validator.isCurrency(amount.toString(), {
@@ -21,4 +21,8 @@ export const invalidTypeResponse = () => {
   return badRequest({
     message: "The type must be EARNING, EXPENSE or INVESTMENT."
   });
+};
+
+export const transactionNotFoundResponse = () => {
+  return notFound({ message: "Transaction not found." });
 };
