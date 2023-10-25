@@ -6,7 +6,8 @@ import {
   invalidPasswordResponse,
   checkIfEmailIsValid,
   invalidEmailResponse,
-  validateRequiredFields
+  validateRequiredFields,
+  missingFieldResponse
 } from "../helpers/index.js";
 import { EmailAlreadyInUseError } from "../../errors/user.js";
 
@@ -25,9 +26,7 @@ export class CreateUserController {
       );
 
       if (!isFieldsValid) {
-        return badRequest({
-          message: `The field ${missingField} is required.`
-        });
+        return missingFieldResponse(missingField);
       }
 
       const isPasswordValid = checkIfPasswordIsValid(params.password);
