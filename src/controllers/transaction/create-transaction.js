@@ -1,4 +1,3 @@
-import validator from "validator";
 import {
   badRequest,
   checkIfIdIsValid,
@@ -6,7 +5,10 @@ import {
   internalServerError,
   invalidIdResponse,
   missingFieldResponse,
-  validateRequiredFields
+  validateRequiredFields,
+  isAmountValidCheck,
+  isTypeValidCheck,
+  invalidTypeResponse
 } from "../helpers/index.js";
 
 export class CreateTransactionController {
@@ -35,15 +37,7 @@ export class CreateTransactionController {
         return invalidIdResponse();
       }
 
-      if (params.amount <= 0) {
-        return badRequest({ message: "Amount must be greater than 0." });
-      }
-
-      const isAmountValid = validator.isDecimal(params.amount.toString(), {
-        digits_after_decimal: [2],
-        allow_negatives: false,
-        decimal_separator: ","
-      });
+      const isAmountValid = isAmountValidCheck(params.amount);
 
       if (!isAmountValid) {
         return badRequest({ message: "Invalid amount." });
@@ -51,12 +45,10 @@ export class CreateTransactionController {
 
       const type = params.type.trim().toUpperCase();
 
-      const isTypeValid = ["EARNING", "EXPENSE", "INVESTMENT"].includes(type);
+      const isTypeValid = isTypeValidCheck(type);
 
       if (!isTypeValid) {
-        return badRequest({
-          message: "The type must be EARNING, EXPENSE or INVESTMENT."
-        });
+        return invalidTypeResponse();
       }
 
       const transaction = await this.createTransactionUseCase.createTransaction(
