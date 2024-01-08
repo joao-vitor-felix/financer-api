@@ -1,15 +1,6 @@
-import {
-  badRequest,
-  checkIfIdIsValid,
-  created,
-  internalServerError,
-  invalidIdResponse,
-  missingFieldResponse,
-  validateRequiredFields,
-  isAmountValidCheck,
-  isTypeValidCheck,
-  invalidTypeResponse
-} from "../helpers/index.js";
+import { ZodError } from "zod";
+import { badRequest, created, internalServerError } from "../helpers/index.js";
+import { createTransactionSchema } from "../../schemas/index.js";
 
 export class CreateTransactionController {
   constructor(createTransactionUseCase) {
@@ -20,43 +11,10 @@ export class CreateTransactionController {
     try {
       const params = httpRequest.body;
 
-      const requiredFields = ["user_id", "name", "date", "amount", "type"];
+      await createTransactionSchema.parseAsync(params);
 
-      const { ok: isFieldsValid, missingField } = validateRequiredFields(
-        params,
-        requiredFields
-      );
-
-      if (!isFieldsValid) {
-        return missingFieldResponse(missingField);
-      }
-
-      const isUUID = checkIfIdIsValid(params.user_id);
-
-      if (!isUUID) {
-        return invalidIdResponse();
-      }
-
-      const isAmountValid = isAmountValidCheck(params.amount);
-
-      if (!isAmountValid) {
-        return badRequest({ message: "Invalid amount." });
-      }
-
-      const type = params.type.trim().toUpperCase();
-
-      const isTypeValid = isTypeValidCheck(type);
-
-      if (!isTypeValid) {
-        return invalidTypeResponse();
-      }
-
-      const transaction = await this.createTransactionUseCase.createTransaction(
-        {
-          ...params,
-          type
-        }
-      );
+      const transaction =
+        await this.createTransactionUseCase.createTransaction(params);
 
       return created({
         message: "Transaction created successfully.",
@@ -64,6 +22,12 @@ export class CreateTransactionController {
       });
     } catch (error) {
       console.log(error);
+
+      if (error instanceof ZodError) {
+        return badRequest({
+          message: error.errors[0].message
+        });
+      }
       return internalServerError();
     }
   }

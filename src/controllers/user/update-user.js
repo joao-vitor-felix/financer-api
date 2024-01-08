@@ -10,7 +10,7 @@ import {
   EmailAlreadyInUseError,
   UserNotFoundError
 } from "../../errors/user.js";
-import { updateUserSchema } from "../../schemas/user.js";
+import { updateUserSchema } from "../../schemas/index.js";
 import { ZodError } from "zod";
 
 export class UpdateUserController {
