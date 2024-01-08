@@ -4,16 +4,14 @@ import {
   notFound,
   success,
   checkIfIdIsValid,
-  invalidEmailResponse,
-  invalidIdResponse,
-  checkIfEmailIsValid,
-  checkIfPasswordIsValid,
-  invalidPasswordResponse
+  invalidIdResponse
 } from "../helpers/index.js";
 import {
   EmailAlreadyInUseError,
   UserNotFoundError
 } from "../../errors/user.js";
+import { updateUserSchema } from "../../schemas/user.js";
+import { ZodError } from "zod";
 
 export class UpdateUserController {
   constructor(updateUserUseCase) {
@@ -31,32 +29,7 @@ export class UpdateUserController {
         return invalidIdResponse();
       }
 
-      const allowedFields = ["first_name", "last_name", "email", "password"];
-
-      const someFieldIsNotAllowed = Object.keys(params).some(
-        field => !allowedFields.includes(field)
-      );
-
-      if (someFieldIsNotAllowed) {
-        return badRequest({
-          message: "Invalid field provided."
-        });
-      }
-
-      if (params.email) {
-        const isEmailValid = checkIfEmailIsValid(params.email);
-        if (!isEmailValid) {
-          return invalidEmailResponse();
-        }
-      }
-
-      if (params.password) {
-        const isValidPassword = checkIfPasswordIsValid(params.password);
-
-        if (!isValidPassword) {
-          return invalidPasswordResponse();
-        }
-      }
+      await updateUserSchema.parseAsync(params);
 
       const updatedUser = await this.updateUserUseCase.updateUser(
         userId,
@@ -68,6 +41,12 @@ export class UpdateUserController {
         response: updatedUser
       });
     } catch (error) {
+      if (error instanceof ZodError) {
+        return badRequest({
+          message: error.errors[0].message
+        });
+      }
+
       if (error instanceof EmailAlreadyInUseError) {
         return badRequest({ message: error.message });
       }
