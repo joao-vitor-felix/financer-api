@@ -1,6 +1,6 @@
 import { badRequest, created, internalServerError } from "../helpers/index.js";
 import { EmailAlreadyInUseError } from "../../errors/user.js";
-import { userSchema } from "../../schemas/index.js";
+import { createUserSchema } from "../../schemas/index.js";
 import { ZodError } from "zod";
 
 export class CreateUserController {
@@ -11,7 +11,7 @@ export class CreateUserController {
     try {
       const params = httpRequest.body;
 
-      await userSchema.parseAsync(params);
+      await createUserSchema.parseAsync(params);
 
       const { first_name, last_name, email, password } = params;
 
