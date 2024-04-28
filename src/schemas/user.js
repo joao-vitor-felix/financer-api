@@ -1,13 +1,13 @@
 import z from "zod";
 
 export const createUserSchema = z.object({
-  first_name: z
+  firstName: z
     .string({ required_error: "First name not provided." })
     .trim()
     .min(1, {
       message: "First name must contain at least 1 character."
     }),
-  last_name: z
+  lastName: z
     .string({ required_error: "Last name not provided." })
     .trim()
     .min(1, {

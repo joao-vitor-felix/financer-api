@@ -13,11 +13,11 @@ export class CreateUserController {
 
       await createUserSchema.parseAsync(params);
 
-      const { first_name, last_name, email, password } = params;
+      const { firstName, lastName, email, password } = params;
 
       const userReturned = await this.createUserUseCase.createUser({
-        first_name,
-        last_name,
+        firstName,
+        lastName,
         email,
         password
       });

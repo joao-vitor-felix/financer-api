@@ -1,23 +1,15 @@
-import { PostgresHelper } from "../../../db/postgres/helper.js";
-
+import { prisma } from "../../../../prisma/client.js";
+import { computeBalanceByType } from "../../../helpers/index.js";
 export class PostgresGetUserBalanceRepository {
   async getUserBalance(userId) {
-    const userBalance = await PostgresHelper.query(
-      `SELECT
-            SUM(CASE WHEN type = 'EARNING' THEN amount ELSE 0 END) AS earnings,
-            SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END) AS expenses,
-            SUM(CASE WHEN type = 'INVESTMENT' THEN amount ELSE 0 END) AS investments,
-            (SUM(CASE WHEN type = 'EARNING' THEN amount ELSE 0 END)
-            - SUM(CASE WHEN type = 'EXPENSE' THEN amount ELSE 0 END)
-            - SUM (CASE WHEN type = 'INVESTMENT' THEN amount ELSE 0 END)) AS balance
-        FROM transactions
-        WHERE user_id = $1`,
-      [userId]
-    );
+    const userTransactions = await prisma.transaction.findMany({
+      where: {
+        userId: userId
+      }
+    });
 
-    return {
-      userId,
-      ...userBalance?.[0]
-    };
+    const transactions = computeBalanceByType(userTransactions);
+
+    return transactions;
   }
 }

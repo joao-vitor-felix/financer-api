@@ -1,5 +1,4 @@
 import bcrypt from "bcrypt";
-import { v4 as uuidv4 } from "uuid";
 import { EmailAlreadyInUseError } from "../../errors/user.js";
 
 export class CreateUserUseCase {
@@ -18,11 +17,15 @@ export class CreateUserUseCase {
       throw new EmailAlreadyInUseError(createUserParams.email);
     }
 
-    const userId = uuidv4();
+    const { firstName, lastName, email } = createUserParams;
+
+    const userId = crypto.randomUUID();
     const hashedPassword = await bcrypt.hash(createUserParams.password, 10);
     const user = {
-      ...createUserParams,
       id: userId,
+      firstName,
+      lastName,
+      email,
       password: hashedPassword
     };
 
