@@ -19,10 +19,8 @@ export class CreateUserUseCase {
 
     const { firstName, lastName, email } = createUserParams;
 
-    const userId = crypto.randomUUID();
     const hashedPassword = await bcrypt.hash(createUserParams.password, 10);
     const user = {
-      id: userId,
       firstName,
       lastName,
       email,
