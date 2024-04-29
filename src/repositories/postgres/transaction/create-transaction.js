@@ -1,23 +1,11 @@
-import { PostgresHelper } from "../../../db/postgres/helper.js";
+import { prisma } from "../../../../prisma/client.js";
 
 export class PostgresCreateTransactionRepository {
   async createTransaction(createTransactionParams) {
-    const createdTransaction = await PostgresHelper.query(
-      `
-      INSERT INTO transactions (id, user_id, name, date, amount, type) 
-      VALUES ($1, $2, $3, $4, $5, $6) 
-      RETURNING *
-      `,
-      [
-        createTransactionParams.id,
-        createTransactionParams.user_id,
-        createTransactionParams.name,
-        createTransactionParams.date,
-        createTransactionParams.amount,
-        createTransactionParams.type
-      ]
-    );
+    const transaction = await prisma.transaction.create({
+      data: createTransactionParams
+    });
 
-    return createdTransaction?.[0];
+    return transaction;
   }
 }
