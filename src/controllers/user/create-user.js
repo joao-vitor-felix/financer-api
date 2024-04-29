@@ -11,7 +11,11 @@ export class CreateUserController {
     try {
       const params = httpRequest.body;
 
-      await createUserSchema.parseAsync(params);
+      const validation = createUserSchema.safeParse(params);
+
+      if (!validation.success) {
+        return badRequest({ message: "Some provided field is invalid" });
+      }
 
       const { firstName, lastName, email, password } = params;
 

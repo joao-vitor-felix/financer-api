@@ -29,7 +29,11 @@ export class UpdateUserController {
         return invalidIdResponse();
       }
 
-      await updateUserSchema.parseAsync(params);
+      const validation = updateUserSchema.safeParse(params);
+
+      if (!validation.success) {
+        return badRequest({ message: "Some provided field is invalid" });
+      }
 
       const updatedUser = await this.updateUserUseCase.updateUser(
         userId,
