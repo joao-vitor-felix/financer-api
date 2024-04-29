@@ -76,7 +76,7 @@ app.patch("/api/transactions/:transactionId", async (request, response) => {
   const updateTransactionController = makeUpdateTransactionController();
 
   const { statusCode, body } =
-    await updateTransactionController.execute(request);
+    await updateTransactionController.updateTransaction(request);
 
   response.status(statusCode).send(body);
 });
