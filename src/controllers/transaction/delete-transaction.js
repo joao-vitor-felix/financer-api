@@ -28,8 +28,7 @@ export class DeleteTransactionController {
       }
 
       return success({
-        message: "Transaction deleted successfully",
-        transaction: deletedTransaction
+        message: "Transaction deleted successfully"
       });
     } catch (error) {
       console.error(error);
