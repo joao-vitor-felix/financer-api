@@ -4,10 +4,11 @@ export class UpdateTransactionUseCase {
   }
 
   async updateTransaction(transactionId, params) {
-    const transaction = await this.updateTransactionRepository.getTransactions(
-      transactionId,
-      params
-    );
+    const transaction =
+      await this.updateTransactionRepository.updateTransaction(
+        transactionId,
+        params
+      );
 
     return transaction;
   }
