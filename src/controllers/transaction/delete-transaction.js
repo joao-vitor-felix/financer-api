@@ -14,9 +14,9 @@ export class DeleteTransactionController {
   async deleteTransaction(httpRequest) {
     try {
       const transactionId = httpRequest.params.transactionId;
-      const isIdValid = checkIfIdIsValid(transactionId);
+      const isUUID = checkIfIdIsValid(transactionId);
 
-      if (!isIdValid) {
+      if (!isUUID) {
         return invalidIdResponse();
       }
 
@@ -29,7 +29,7 @@ export class DeleteTransactionController {
 
       return success({
         message: "Transaction deleted successfully",
-        deletedTransaction
+        transaction: deletedTransaction
       });
     } catch (error) {
       console.error(error);
