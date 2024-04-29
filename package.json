@@ -10,8 +10,7 @@
   "scripts": {
     "start:dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "husky install",
-    "migrations": "node src/db/postgres/migrations/exec.js"
+    "postinstall": "husky install && prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
