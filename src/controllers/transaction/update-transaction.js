@@ -1,13 +1,11 @@
+import { updateTransactionSchema } from "../../schemas/transaction.js";
 import {
   badRequest,
   checkIfIdIsValid,
   internalServerError,
-  invalidAmountResponse,
   invalidIdResponse,
-  invalidTypeResponse,
-  isAmountValidCheck,
-  isTypeValidCheck,
-  success
+  success,
+  transactionNotFoundResponse
 } from "../helpers/index.js";
 
 export class UpdateTransactionController {
@@ -16,48 +14,33 @@ export class UpdateTransactionController {
   }
   async updateTransaction(httpRequest) {
     try {
-      const isIdValid = checkIfIdIsValid(httpRequest.params.transactionId);
+      const transactionId = httpRequest.params.transactionId;
 
-      if (!isIdValid) {
+      const isUUID = checkIfIdIsValid(transactionId);
+
+      if (!isUUID) {
         return invalidIdResponse();
       }
 
       const params = httpRequest.body;
 
-      const allowedFields = ["name", "date", "amount", "type"];
+      const validation = await updateTransactionSchema.safeParseAsync(params);
 
-      const isSomeFieldNotAllowed = Object.keys(params).some(
-        field => !allowedFields.includes(field)
-      );
-
-      if (isSomeFieldNotAllowed) {
-        return badRequest({
-          message: "Some provided field is not allowed."
-        });
+      if (!validation.success) {
+        return badRequest({ message: "Some provided field is invalid" });
       }
 
-      if (params.amount) {
-        const isAmountValid = isAmountValidCheck(params.amount);
+      const updatedTransaction =
+        await this.updateTransactionUseCase.updateTransaction(
+          httpRequest.params.transactionId,
+          params
+        );
 
-        if (!isAmountValid) {
-          return invalidAmountResponse();
-        }
+      if (!updatedTransaction) {
+        return transactionNotFoundResponse();
       }
 
-      if (params.type) {
-        const isTypeValid = isTypeValidCheck(params.type);
-
-        if (!isTypeValid) {
-          return invalidTypeResponse();
-        }
-      }
-
-      const transaction = await this.updateTransactionUseCase.updateTransaction(
-        httpRequest.params.transactionId,
-        params
-      );
-
-      return success(transaction);
+      return success(updatedTransaction);
     } catch (error) {
       console.error(error);
 
