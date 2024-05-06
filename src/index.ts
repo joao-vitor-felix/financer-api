@@ -1,4 +1,3 @@
-import "dotenv/config.js";
 import express from "express";
 import {
   makeCreateUserController,
@@ -6,13 +5,13 @@ import {
   makeGetUserBalanceController,
   makeGetUserByIdController,
   makeUpdateUserController
-} from "./src/factories/controllers/user.js";
+} from "./factories/controllers/user.js";
 import {
   makeCreateTransactionController,
   makeDeleteTransactionController,
   makeGetTransactionsByUserIdController,
   makeUpdateTransactionController
-} from "./src/factories/controllers/transaction.js";
+} from "./factories/controllers/transaction.js";
 
 const app = express();
 
