@@ -8,6 +8,8 @@ type ErrorResponse = {
   body: { message: string };
 };
 
+export type Response<T> = SuccessResponse<T> | ErrorResponse;
+
 type BodySuccessResponseShape<T> = SuccessResponse<T>["body"];
 
 export const created = <T>(
