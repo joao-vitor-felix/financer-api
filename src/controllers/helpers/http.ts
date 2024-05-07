@@ -8,21 +8,23 @@ type ErrorResponse = {
   body: { message: string };
 };
 
-export const created = <T>(data: T): SuccessResponse<T> => {
+type BodySuccessResponseShape<T> = SuccessResponse<T>["body"];
+
+export const created = <T>(
+  response: BodySuccessResponseShape<T>
+): SuccessResponse<T> => {
   return {
     statusCode: 201,
-    body: {
-      data
-    }
+    body: response
   };
 };
 
-export const success = <T>(data: T): SuccessResponse<T> => {
+export const success = <T>(
+  response: BodySuccessResponseShape<T>
+): SuccessResponse<T> => {
   return {
     statusCode: 200,
-    body: {
-      data
-    }
+    body: response
   };
 };
 
