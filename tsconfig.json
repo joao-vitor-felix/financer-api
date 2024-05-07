@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES6",
     "lib": ["ES2023"],
-    "module": "Node16",
+    "module": "ES6",
     "skipLibCheck": true,
     "types": ["vitest/globals"],
 
-    "moduleResolution": "Node16",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
