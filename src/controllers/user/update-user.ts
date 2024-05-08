@@ -7,7 +7,7 @@ import {
   invalidIdResponse
 } from "@/controllers/helpers";
 import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors/user";
-import { updateUserSchema } from "@/schemas";
+import { UpdateUserSchema, updateUserSchema } from "@/schemas";
 import { ZodError } from "zod";
 import { Request } from "express";
 import { IUpdateUserController, IUpdateUserUseCase } from "@/types";
@@ -18,7 +18,7 @@ export class UpdateUserController implements IUpdateUserController {
     try {
       const userId = httpRequest.params.userId;
 
-      const params = httpRequest.body;
+      const params: UpdateUserSchema = httpRequest.body;
 
       const isUUID = checkIfIdIsValid(userId);
 

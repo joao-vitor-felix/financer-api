@@ -32,6 +32,10 @@ export const createUserSchema = z
     message: "Some provided field is not allowed."
   });
 
+export type CreateUserSchema = z.infer<typeof createUserSchema>;
+
 export const updateUserSchema = createUserSchema.partial().strict({
   message: "Some provided field is not allowed."
 });
+
+export type UpdateUserSchema = z.infer<typeof updateUserSchema>;

@@ -1,20 +1,20 @@
-import { badRequest, created, internalServerError } from "../helpers/index";
+import {
+  badRequest,
+  created,
+  internalServerError
+} from "@/controllers/helpers";
 import { EmailAlreadyInUseError } from "@/errors/user";
-import { createUserSchema } from "@/schemas/index";
+import { CreateUserSchema, createUserSchema } from "@/schemas";
 import { ZodError } from "zod";
 import { Request } from "express";
-import {
-  CreateUserParams,
-  ICreateUserController,
-  ICreateUserUseCase
-} from "@/types";
+import { ICreateUserController, ICreateUserUseCase } from "@/types";
 
 export class CreateUserController implements ICreateUserController {
   constructor(private createUserUseCase: ICreateUserUseCase) {}
 
   async createUser(httpRequest: Request) {
     try {
-      const params: CreateUserParams = httpRequest.body;
+      const params: CreateUserSchema = httpRequest.body;
 
       const validation = createUserSchema.safeParse(params);
 

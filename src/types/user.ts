@@ -1,37 +1,29 @@
 import { Prisma, User } from "@prisma/client";
 import { Response } from "@/controllers/helpers";
 import { Request } from "express";
-
-export interface CreateUserParams {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+import { CreateUserSchema, UpdateUserSchema } from "@/schemas";
 
 export interface ICreateUserController {
   createUser(httpRequest: Request): Promise<Response<User>>;
 }
 
 export interface ICreateUserUseCase {
-  createUser(params: CreateUserParams): Promise<User>;
+  createUser(params: CreateUserSchema): Promise<User>;
 }
 
 export interface ICreateUserRepository {
-  createUser(params: CreateUserParams): Promise<User>;
+  createUser(params: CreateUserSchema): Promise<User>;
 }
-
-export type UpdateUserParams = Partial<CreateUserParams>;
 
 export interface IUpdateUserController {
   updateUser(httpRequest: Request): Promise<Response<User>>;
 }
 
 export interface IUpdateUserUseCase {
-  updateUser(userId: string, updateUserParams: UpdateUserParams): Promise<User>;
+  updateUser(userId: string, updateUserParams: UpdateUserSchema): Promise<User>;
 }
 export interface IUpdateUserRepository {
-  updateUser(userId: string, updateUserParams: UpdateUserParams): Promise<User>;
+  updateUser(userId: string, updateUserParams: UpdateUserSchema): Promise<User>;
 }
 
 export interface IDeleteUserController {
