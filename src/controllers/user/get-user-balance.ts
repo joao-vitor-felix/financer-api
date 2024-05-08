@@ -1,18 +1,18 @@
-import { UserNotFoundError } from "../../errors/user.js";
+import { UserNotFoundError } from "@/errors/user";
 import {
   checkIfIdIsValid,
   internalServerError,
   invalidIdResponse,
   success,
   userNotFoundResponse
-} from "../helpers/index.js";
+} from "@/controllers/helpers";
+import { IGetUserBalanceController, IGetUserBalanceUseCase } from "@/types";
+import { Request } from "express";
 
-export class GetUserBalanceController {
-  constructor(getUserBalanceUseCase) {
-    this.getUserBalanceUseCase = getUserBalanceUseCase;
-  }
+export class GetUserBalanceController implements IGetUserBalanceController {
+  constructor(private getUserBalanceUseCase: IGetUserBalanceUseCase) {}
 
-  async getUserBalance(httpRequest) {
+  async getUserBalance(httpRequest: Request) {
     const userId = httpRequest.params.userId;
 
     try {
@@ -26,8 +26,7 @@ export class GetUserBalanceController {
         await this.getUserBalanceUseCase.getUserBalance(userId);
 
       return success({
-        message: "User balance found successfully.",
-        response: userBalance
+        data: userBalance
       });
     } catch (error) {
       console.log(error);
@@ -35,6 +34,7 @@ export class GetUserBalanceController {
       if (error instanceof UserNotFoundError) {
         return userNotFoundResponse();
       }
+
       return internalServerError();
     }
   }

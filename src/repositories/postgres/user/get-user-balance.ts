@@ -1,7 +1,11 @@
 import { Prisma } from "@prisma/client";
-import { prisma } from "../../../../prisma/client.js";
-export class PostgresGetUserBalanceRepository {
-  async getUserBalance(userId) {
+import { prisma } from "../../../../prisma/client";
+import { IGetUserBalanceRepository } from "@/types";
+
+export class PostgresGetUserBalanceRepository
+  implements IGetUserBalanceRepository
+{
+  async getUserBalance(userId: string) {
     const {
       _sum: { amount: totalExpenses }
     } = await prisma.transaction.aggregate({
@@ -38,12 +42,16 @@ export class PostgresGetUserBalanceRepository {
       }
     });
 
-    const _totalEarnings = totalEarnings ?? new Prisma.Decimal(0);
-    const _totalExpenses = totalExpenses ?? new Prisma.Decimal(0);
-    const _totalInvestments = totalInvestments ?? new Prisma.Decimal(0);
+    const initialBalance = new Prisma.Decimal(0);
+
+    const _totalEarnings = totalEarnings ?? initialBalance;
+    const _totalExpenses = totalExpenses ?? initialBalance;
+    const _totalInvestments = totalInvestments ?? initialBalance;
 
     const balance = new Prisma.Decimal(
-      _totalEarnings - _totalExpenses - _totalInvestments
+      Number(_totalEarnings) -
+        Number(_totalExpenses) -
+        Number(_totalInvestments)
     );
 
     return {

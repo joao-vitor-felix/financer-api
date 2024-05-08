@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { Response } from "@/controllers/helpers";
 import { Request } from "express";
 
@@ -31,6 +31,25 @@ export interface IDeleteUserUseCase {
 
 export interface IDeleteUserRepository {
   deleteUser(id: string): Promise<null | undefined>;
+}
+
+interface UserBalance {
+  earnings: Prisma.Decimal;
+  expenses: Prisma.Decimal;
+  investments: Prisma.Decimal;
+  balance: Prisma.Decimal;
+}
+
+export interface IGetUserBalanceController {
+  getUserBalance(httpRequest: Request): Promise<Response<UserBalance>>;
+}
+
+export interface IGetUserBalanceUseCase {
+  getUserBalance(userId: string): Promise<UserBalance>;
+}
+
+export interface IGetUserBalanceRepository {
+  getUserBalance(userId: string): Promise<UserBalance>;
 }
 
 export interface IGetUserByEmailRepository {
