@@ -51,8 +51,12 @@ export const createTransactionSchema = z
     message: "Some provided field is not allowed."
   });
 
+export type CreateTransactionSchema = z.infer<typeof createTransactionSchema>;
+
 export const updateTransactionSchema = createTransactionSchema
   .partial()
   .strict({
     message: "Some provided field is not allowed."
   });
+
+export type UpdateTransactionSchema = z.infer<typeof updateTransactionSchema>;
