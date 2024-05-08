@@ -30,12 +30,11 @@ export class GetUserBalanceController implements IGetUserBalanceController {
         data: userBalance
       });
     } catch (error) {
-      console.log(error);
-
       if (error instanceof UserNotFoundError) {
         return userNotFoundResponse();
       }
 
+      console.error(error);
       return internalServerError();
     }
   }
