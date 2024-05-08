@@ -29,9 +29,9 @@ export class GetTransactionsByUserIdController
         return missingFieldResponse("userId");
       }
 
-      const isUserIdValid = checkIfIdIsValid(userId);
+      const isUUID = checkIfIdIsValid(userId);
 
-      if (!isUserIdValid) {
+      if (!isUUID) {
         return invalidIdResponse();
       }
 
@@ -42,12 +42,11 @@ export class GetTransactionsByUserIdController
         data: transactions
       });
     } catch (error) {
-      console.error(error);
-
       if (error instanceof UserNotFoundError) {
         return userNotFoundResponse();
       }
 
+      console.error(error);
       return internalServerError();
     }
   }
