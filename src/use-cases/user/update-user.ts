@@ -1,20 +1,21 @@
 import bcrypt from "bcrypt";
+import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors/user";
 import {
-  EmailAlreadyInUseError,
-  UserNotFoundError
-} from "../../errors/user.js";
+  IGetUserByEmailRepository,
+  IGetUserByIdUseCase,
+  IUpdateUserRepository,
+  IUpdateUserUseCase,
+  UpdateUserParams
+} from "@/types";
 
-export class UpdateUserUseCase {
+export class UpdateUserUseCase implements IUpdateUserUseCase {
   constructor(
-    getUserByIdUseCase,
-    getUserByEmailRepository,
-    updateUserRepository
-  ) {
-    this.getUserByIdUseCase = getUserByIdUseCase;
-    this.getUserByEmailRepository = getUserByEmailRepository;
-    this.updateUserRepository = updateUserRepository;
-  }
-  async updateUser(userId, updateUserParams) {
+    private getUserByIdUseCase: IGetUserByIdUseCase,
+    private getUserByEmailRepository: IGetUserByEmailRepository,
+    private updateUserRepository: IUpdateUserRepository
+  ) {}
+
+  async updateUser(userId: string, updateUserParams: UpdateUserParams) {
     const userReturned = await this.getUserByIdUseCase.getUserById(userId);
 
     if (!userReturned) {

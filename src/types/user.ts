@@ -21,6 +21,19 @@ export interface ICreateUserRepository {
   createUser(params: CreateUserParams): Promise<User>;
 }
 
+export type UpdateUserParams = Partial<CreateUserParams>;
+
+export interface IUpdateUserController {
+  updateUser(httpRequest: Request): Promise<Response<User>>;
+}
+
+export interface IUpdateUserUseCase {
+  updateUser(userId: string, updateUserParams: UpdateUserParams): Promise<User>;
+}
+export interface IUpdateUserRepository {
+  updateUser(userId: string, updateUserParams: UpdateUserParams): Promise<User>;
+}
+
 export interface IDeleteUserController {
   deleteUser(httpRequest: Request): Promise<Response<null>>;
 }
