@@ -15,26 +15,23 @@ export class DeleteUserController implements IDeleteUserController {
 
   async deleteUser(httpRequest: Request) {
     try {
-      const userId: string = httpRequest.params.userId;
+      const userId = httpRequest.params.userId;
 
-      const isIdValid = checkIfIdIsValid(userId);
+      const isUUID = checkIfIdIsValid(userId);
 
-      if (!isIdValid) {
+      if (!isUUID) {
         return invalidIdResponse();
       }
 
-      const response = await this.deleteUserUseCase.deleteUser(userId);
-
-      if (response === null) {
-        return notFound("User not found");
-      }
+      await this.deleteUserUseCase.deleteUser(userId);
 
       return success({ data: null });
     } catch (error) {
-      console.log(error);
       if (error instanceof UserNotFoundError) {
         return notFound(error.message);
       }
+
+      console.error(error);
       return internalServerError();
     }
   }

@@ -32,11 +32,11 @@ export interface IDeleteUserController {
 }
 
 export interface IDeleteUserUseCase {
-  deleteUser(id: string): Promise<null | undefined>;
+  deleteUser(id: string): Promise<void>;
 }
 
 export interface IDeleteUserRepository {
-  deleteUser(id: string): Promise<null | undefined>;
+  deleteUser(id: string): Promise<void>;
 }
 
 interface UserBalance {
