@@ -15,6 +15,18 @@ export interface ICreateTransactionUseCase {
   createTransaction(transaction: CreateTransactionSchema): Promise<Transaction>;
 }
 
+export interface IGetTransactionsByUserIdController {
+  getTransactions(httpRequest: Request): Promise<Response<Transaction[]>>;
+}
+
+export interface IGetTransactionsByUserIdUseCase {
+  getTransactions(userId: string): Promise<Transaction[]>;
+}
+
+export interface IGetTransactionsByUserIdRepository {
+  getTransactions(userId: string): Promise<Transaction[]>;
+}
+
 export interface IDeleteTransactionController {
   deleteTransaction(httpRequest: Request): Promise<Response<null>>;
 }
