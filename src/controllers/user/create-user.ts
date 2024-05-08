@@ -36,8 +36,6 @@ export class CreateUserController implements ICreateUserController {
         data: user
       });
     } catch (error) {
-      console.log(error);
-
       if (error instanceof ZodError) {
         return badRequest(error.errors[0].message);
       }
@@ -46,6 +44,7 @@ export class CreateUserController implements ICreateUserController {
         return badRequest(error.message);
       }
 
+      console.log(error);
       return internalServerError();
     }
   }
