@@ -4,14 +4,21 @@ import {
   success,
   internalServerError,
   transactionNotFoundResponse
-} from "../helpers/index.js";
+} from "@/controllers/helpers";
+import {
+  IDeleteTransactionController,
+  IDeleteTransactionUseCase
+} from "@/types";
+import { Request } from "express";
 
-export class DeleteTransactionController {
-  constructor(deleteTransactionUseCase) {
+export class DeleteTransactionController
+  implements IDeleteTransactionController
+{
+  constructor(private deleteTransactionUseCase: IDeleteTransactionUseCase) {
     this.deleteTransactionUseCase = deleteTransactionUseCase;
   }
 
-  async deleteTransaction(httpRequest) {
+  async deleteTransaction(httpRequest: Request) {
     try {
       const transactionId = httpRequest.params.transactionId;
       const isUUID = checkIfIdIsValid(transactionId);
@@ -20,16 +27,14 @@ export class DeleteTransactionController {
         return invalidIdResponse();
       }
 
-      const deletedTransaction =
+      const response =
         await this.deleteTransactionUseCase.deleteTransaction(transactionId);
 
-      if (!deletedTransaction) {
+      if (response === null) {
         return transactionNotFoundResponse();
       }
 
-      return success({
-        message: "Transaction deleted successfully"
-      });
+      return success({ data: null });
     } catch (error) {
       console.error(error);
 

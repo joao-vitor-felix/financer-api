@@ -14,3 +14,15 @@ export interface ICreateTransactionRepository {
 export interface ICreateTransactionUseCase {
   createTransaction(transaction: CreateTransactionSchema): Promise<Transaction>;
 }
+
+export interface IDeleteTransactionController {
+  deleteTransaction(httpRequest: Request): Promise<Response<null>>;
+}
+
+export interface IDeleteTransactionUseCase {
+  deleteTransaction(id: string): Promise<null | undefined>;
+}
+
+export interface IDeleteTransactionRepository {
+  deleteTransaction(id: string): Promise<null | undefined>;
+}
