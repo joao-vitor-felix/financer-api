@@ -6,10 +6,10 @@ import {
 } from "@/controllers";
 import {
   PostgresCreateTransactionRepository,
-  PostgresGetUserByIdRepository,
+  PostgresDeleteTransactionRepository,
   PostgresGetTransactionsByUserIdRepository,
-  PostgresUpdateTransactionRepository,
-  PostgresDeleteTransactionRepository
+  PostgresGetUserByIdRepository,
+  PostgresUpdateTransactionRepository
 } from "@/repositories/postgres";
 import {
   CreateTransactionUseCase,

@@ -1,9 +1,9 @@
+import { UserNotFoundError } from "@/errors/user";
+import { IGetUserByIdRepository } from "@/types";
 import {
   IGetTransactionsByUserIdRepository,
   IGetTransactionsByUserIdUseCase
 } from "@/types/transaction.js";
-import { UserNotFoundError } from "@/errors/user";
-import { IGetUserByIdRepository } from "@/types";
 
 export class GetTransactionsByUserIdUseCase
   implements IGetTransactionsByUserIdUseCase

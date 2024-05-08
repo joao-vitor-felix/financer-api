@@ -1,10 +1,10 @@
-import {
-  IGetUserByIdRepository,
-  ICreateTransactionRepository,
-  ICreateTransactionUseCase
-} from "@/types";
 import { UserNotFoundError } from "@/errors/user";
 import { CreateTransactionSchema } from "@/schemas";
+import {
+  ICreateTransactionRepository,
+  ICreateTransactionUseCase,
+  IGetUserByIdRepository
+} from "@/types";
 
 export class CreateTransactionUseCase implements ICreateTransactionUseCase {
   constructor(

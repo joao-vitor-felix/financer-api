@@ -1,15 +1,16 @@
+import { Request } from "express";
+import { ZodError } from "zod";
+
 import {
   badRequest,
-  internalServerError,
-  notFound,
-  success,
   checkIfIdIsValid,
-  invalidIdResponse
+  internalServerError,
+  invalidIdResponse,
+  notFound,
+  success
 } from "@/controllers/helpers";
 import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors/user";
 import { UpdateUserSchema, updateUserSchema } from "@/schemas";
-import { ZodError } from "zod";
-import { Request } from "express";
 import { IUpdateUserController, IUpdateUserUseCase } from "@/types";
 
 export class UpdateUserController implements IUpdateUserController {

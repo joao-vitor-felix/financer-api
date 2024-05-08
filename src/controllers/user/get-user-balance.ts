@@ -1,4 +1,5 @@
-import { UserNotFoundError } from "@/errors/user";
+import { Request } from "express";
+
 import {
   checkIfIdIsValid,
   internalServerError,
@@ -6,8 +7,8 @@ import {
   success,
   userNotFoundResponse
 } from "@/controllers/helpers";
+import { UserNotFoundError } from "@/errors/user";
 import { IGetUserBalanceController, IGetUserBalanceUseCase } from "@/types";
-import { Request } from "express";
 
 export class GetUserBalanceController implements IGetUserBalanceController {
   constructor(private getUserBalanceUseCase: IGetUserBalanceUseCase) {}

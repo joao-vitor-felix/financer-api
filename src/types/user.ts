@@ -1,6 +1,7 @@
 import { Prisma, User } from "@prisma/client";
-import { Response } from "@/controllers/helpers";
 import { Request } from "express";
+
+import { Response } from "@/controllers/helpers";
 import { CreateUserSchema, UpdateUserSchema } from "@/schemas";
 
 export interface ICreateUserController {

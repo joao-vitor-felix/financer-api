@@ -1,14 +1,15 @@
 import express from "express";
+
 import {
+  makeCreateTransactionController,
   makeCreateUserController,
+  makeDeleteTransactionController,
   makeDeleteUserController,
+  makeGetTransactionsByUserIdController,
   makeGetUserBalanceController,
   makeGetUserByIdController,
-  makeUpdateUserController,
-  makeCreateTransactionController,
-  makeDeleteTransactionController,
-  makeGetTransactionsByUserIdController,
-  makeUpdateTransactionController
+  makeUpdateTransactionController,
+  makeUpdateUserController
 } from "@/factories";
 
 const app = express();

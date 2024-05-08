@@ -1,6 +1,7 @@
-import validator from "validator";
-import { badRequest, notFound } from "./index";
 import { TransactionType } from "@prisma/client";
+import validator from "validator";
+
+import { badRequest, notFound } from "./index";
 
 const validTypes: TransactionType[] = ["EARNING", "EXPENSE", "INVESTMENT"];
 

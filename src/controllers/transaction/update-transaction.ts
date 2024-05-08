@@ -1,8 +1,5 @@
-import {
-  IUpdateTransactionController,
-  IUpdateTransactionUseCase
-} from "@/types";
-import { UpdateTransactionSchema, updateTransactionSchema } from "@/schemas";
+import { Request } from "express";
+
 import {
   badRequest,
   checkIfIdIsValid,
@@ -11,7 +8,11 @@ import {
   success,
   transactionNotFoundResponse
 } from "@/controllers/helpers";
-import { Request } from "express";
+import { UpdateTransactionSchema, updateTransactionSchema } from "@/schemas";
+import {
+  IUpdateTransactionController,
+  IUpdateTransactionUseCase
+} from "@/types";
 
 export class UpdateTransactionController
   implements IUpdateTransactionController

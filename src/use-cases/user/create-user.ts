@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
+
 import { EmailAlreadyInUseError } from "@/errors/user";
+import { CreateUserSchema } from "@/schemas";
 import {
-  CreateUserParams,
   ICreateUserRepository,
   ICreateUserUseCase,
   IGetUserByEmailRepository
@@ -13,7 +14,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
     private createUserRepository: ICreateUserRepository
   ) {}
 
-  async createUser(params: CreateUserParams) {
+  async createUser(params: CreateUserSchema) {
     const isEmailAlreadyInUse =
       await this.getUserByEmailRepository.getUserByEmail(params.email);
 

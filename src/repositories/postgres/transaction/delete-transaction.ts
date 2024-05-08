@@ -1,4 +1,5 @@
 import { IDeleteTransactionRepository } from "@/types";
+
 import { prisma } from "../../../../prisma/client";
 
 export class PostgresDeleteTransactionRepository

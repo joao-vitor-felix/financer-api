@@ -1,6 +1,7 @@
 import { UpdateTransactionSchema } from "@/schemas";
-import { prisma } from "../../../../prisma/client";
 import { IUpdateTransactionRepository } from "@/types";
+
+import { prisma } from "../../../../prisma/client";
 
 export class PostgresUpdateTransactionRepository
   implements IUpdateTransactionRepository

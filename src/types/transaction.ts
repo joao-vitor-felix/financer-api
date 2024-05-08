@@ -1,7 +1,8 @@
-import { CreateTransactionSchema, UpdateTransactionSchema } from "@/schemas";
 import { Transaction } from "@prisma/client";
-import { Response } from "@/controllers/helpers";
 import { Request } from "express";
+
+import { Response } from "@/controllers/helpers";
+import { CreateTransactionSchema, UpdateTransactionSchema } from "@/schemas";
 
 export interface ICreateTransactionController {
   createTransaction(httpRequest: Request): Promise<Response<Transaction>>;

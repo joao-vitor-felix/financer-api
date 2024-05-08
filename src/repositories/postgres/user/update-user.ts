@@ -1,4 +1,5 @@
 import { IUpdateUserRepository, UpdateUserParams } from "@/types";
+
 import { prisma } from "../../../../prisma/client";
 
 export class PostgresUpdateUserRepository implements IUpdateUserRepository {

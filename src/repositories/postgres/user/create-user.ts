@@ -1,4 +1,5 @@
 import { CreateUserParams, ICreateUserRepository } from "@/types";
+
 import { prisma } from "../../../../prisma/client";
 
 interface CreateUserRepositoryParams extends CreateUserParams {

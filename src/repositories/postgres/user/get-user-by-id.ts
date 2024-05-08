@@ -1,4 +1,5 @@
 import { IGetUserByIdRepository } from "@/types";
+
 import { prisma } from "../../../../prisma/client";
 
 export class PostgresGetUserByIdRepository implements IGetUserByIdRepository {

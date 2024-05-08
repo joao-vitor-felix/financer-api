@@ -1,3 +1,6 @@
+import { Request } from "express";
+import { ZodError } from "zod";
+
 import {
   badRequest,
   created,
@@ -5,8 +8,6 @@ import {
 } from "@/controllers/helpers";
 import { EmailAlreadyInUseError } from "@/errors/user";
 import { CreateUserSchema, createUserSchema } from "@/schemas";
-import { ZodError } from "zod";
-import { Request } from "express";
 import { ICreateUserController, ICreateUserUseCase } from "@/types";
 
 export class CreateUserController implements ICreateUserController {
@@ -44,6 +45,7 @@ export class CreateUserController implements ICreateUserController {
       if (error instanceof EmailAlreadyInUseError) {
         return badRequest(error.message);
       }
+
       return internalServerError();
     }
   }

@@ -1,6 +1,7 @@
 import { CreateTransactionSchema } from "@/schemas";
-import { prisma } from "../../../../prisma/client";
 import { ICreateTransactionRepository } from "@/types";
+
+import { prisma } from "../../../../prisma/client";
 
 export class PostgresCreateTransactionRepository
   implements ICreateTransactionRepository

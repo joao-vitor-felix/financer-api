@@ -1,9 +1,9 @@
+import { UserNotFoundError } from "@/errors/user";
 import {
   IDeleteUserRepository,
   IDeleteUserUseCase,
   IGetUserByIdUseCase
 } from "@/types";
-import { UserNotFoundError } from "@/errors/user";
 
 export class DeleteUserUseCase implements IDeleteUserUseCase {
   constructor(

@@ -1,13 +1,14 @@
-import { IDeleteUserController, IDeleteUserUseCase } from "@/types";
-import { UserNotFoundError } from "@/errors/user";
+import { Request } from "express";
+
 import {
   checkIfIdIsValid,
+  internalServerError,
   invalidIdResponse,
-  success,
   notFound,
-  internalServerError
+  success
 } from "@/controllers/helpers";
-import { Request } from "express";
+import { UserNotFoundError } from "@/errors/user";
+import { IDeleteUserController, IDeleteUserUseCase } from "@/types";
 
 export class DeleteUserController implements IDeleteUserController {
   constructor(private deleteUserUseCase: IDeleteUserUseCase) {}

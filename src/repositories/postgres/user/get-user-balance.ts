@@ -1,6 +1,8 @@
 import { Prisma } from "@prisma/client";
-import { prisma } from "../../../../prisma/client";
+
 import { IGetUserBalanceRepository } from "@/types";
+
+import { prisma } from "../../../../prisma/client";
 
 export class PostgresGetUserBalanceRepository
   implements IGetUserBalanceRepository

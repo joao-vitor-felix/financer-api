@@ -1,24 +1,24 @@
 import {
   CreateUserController,
-  GetUserByIdController,
-  UpdateUserController,
   DeleteUserController,
-  GetUserBalanceController
+  GetUserBalanceController,
+  GetUserByIdController,
+  UpdateUserController
 } from "@/controllers";
 import {
   PostgresCreateUserRepository,
+  PostgresDeleteUserRepository,
+  PostgresGetUserBalanceRepository,
   PostgresGetUserByEmailRepository,
   PostgresGetUserByIdRepository,
-  PostgresDeleteUserRepository,
-  PostgresUpdateUserRepository,
-  PostgresGetUserBalanceRepository
+  PostgresUpdateUserRepository
 } from "@/repositories/postgres";
 import {
   CreateUserUseCase,
-  GetUserByIdUseCase,
   DeleteUserUseCase,
-  UpdateUserUseCase,
-  GetUserBalanceUseCase
+  GetUserBalanceUseCase,
+  GetUserByIdUseCase,
+  UpdateUserUseCase
 } from "@/use-cases";
 
 export const makeGetUserByIdController = () => {

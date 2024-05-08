@@ -1,11 +1,12 @@
 import bcrypt from "bcrypt";
+
 import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors/user";
+import { UpdateUserSchema } from "@/schemas";
 import {
   IGetUserByEmailRepository,
   IGetUserByIdUseCase,
   IUpdateUserRepository,
-  IUpdateUserUseCase,
-  UpdateUserParams
+  IUpdateUserUseCase
 } from "@/types";
 
 export class UpdateUserUseCase implements IUpdateUserUseCase {
@@ -15,7 +16,7 @@ export class UpdateUserUseCase implements IUpdateUserUseCase {
     private updateUserRepository: IUpdateUserRepository
   ) {}
 
-  async updateUser(userId: string, updateUserParams: UpdateUserParams) {
+  async updateUser(userId: string, updateUserParams: UpdateUserSchema) {
     const userReturned = await this.getUserByIdUseCase.getUserById(userId);
 
     if (!userReturned) {

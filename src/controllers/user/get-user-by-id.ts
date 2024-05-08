@@ -1,13 +1,14 @@
-import { UserNotFoundError } from "@/errors/user";
+import { Request } from "express";
+
 import {
   checkIfIdIsValid,
-  invalidIdResponse,
   internalServerError,
+  invalidIdResponse,
   success,
   userNotFoundResponse
 } from "@/controllers/helpers";
+import { UserNotFoundError } from "@/errors/user";
 import { IGetUserByIdController, IGetUserByIdUseCase } from "@/types";
-import { Request } from "express";
 
 export class GetUserByIdController implements IGetUserByIdController {
   constructor(private getUserByIdUseCase: IGetUserByIdUseCase) {}

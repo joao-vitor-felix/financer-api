@@ -1,4 +1,5 @@
 import { IGetUserByEmailRepository } from "@/types/user";
+
 import { prisma } from "../../../../prisma/client";
 
 export class PostgresGetUserByEmailRepository

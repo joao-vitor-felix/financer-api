@@ -1,8 +1,5 @@
-import {
-  IGetTransactionsByUserIdController,
-  IGetTransactionsByUserIdUseCase
-} from "@/types";
-import { UserNotFoundError } from "@/errors/user";
+import { Request } from "express";
+
 import {
   checkIfIdIsValid,
   internalServerError,
@@ -11,7 +8,11 @@ import {
   success,
   userNotFoundResponse
 } from "@/controllers/helpers";
-import { Request } from "express";
+import { UserNotFoundError } from "@/errors/user";
+import {
+  IGetTransactionsByUserIdController,
+  IGetTransactionsByUserIdUseCase
+} from "@/types";
 
 export class GetTransactionsByUserIdController
   implements IGetTransactionsByUserIdController
