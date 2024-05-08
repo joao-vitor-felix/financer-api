@@ -3,20 +3,20 @@ import {
   DeleteTransactionController,
   GetTransactionsByUserIdController,
   UpdateTransactionController
-} from "../../controllers/index.js";
+} from "@/controllers";
 import {
   PostgresCreateTransactionRepository,
   PostgresGetUserByIdRepository,
   PostgresGetTransactionsByUserIdRepository,
   PostgresUpdateTransactionRepository,
   PostgresDeleteTransactionRepository
-} from "../../repositories/postgres/index.js";
+} from "@/repositories/postgres";
 import {
   CreateTransactionUseCase,
   DeleteTransactionUseCase,
   GetTransactionsByUserIdUseCase,
   UpdateTransactionUseCase
-} from "../../use-cases/index.js";
+} from "@/use-cases";
 
 export const makeCreateTransactionController = () => {
   const createTransactionRepository = new PostgresCreateTransactionRepository();

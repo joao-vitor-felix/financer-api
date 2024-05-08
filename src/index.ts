@@ -4,14 +4,12 @@ import {
   makeDeleteUserController,
   makeGetUserBalanceController,
   makeGetUserByIdController,
-  makeUpdateUserController
-} from "./factories/controllers/user.js";
-import {
+  makeUpdateUserController,
   makeCreateTransactionController,
   makeDeleteTransactionController,
   makeGetTransactionsByUserIdController,
   makeUpdateTransactionController
-} from "./factories/controllers/transaction.js";
+} from "@/factories";
 
 const app = express();
 
