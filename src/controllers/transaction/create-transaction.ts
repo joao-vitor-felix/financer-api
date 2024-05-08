@@ -11,7 +11,6 @@ import {
   ICreateTransactionController,
   ICreateTransactionUseCase
 } from "@/types";
-
 export class CreateTransactionController
   implements ICreateTransactionController
 {
@@ -34,11 +33,11 @@ export class CreateTransactionController
         data: transaction
       });
     } catch (error) {
-      console.log(error);
-
       if (error instanceof ZodError) {
         return badRequest(error.errors[0].message);
       }
+
+      console.error(error);
 
       return internalServerError();
     }
