@@ -7,7 +7,6 @@ import {
   success,
   userNotFoundResponse
 } from "@/controllers/helpers";
-import { UserNotFoundError } from "@/errors/user";
 import { IGetUserByIdController, IGetUserByIdUseCase } from "@/types";
 
 export class GetUserByIdController implements IGetUserByIdController {
@@ -25,7 +24,7 @@ export class GetUserByIdController implements IGetUserByIdController {
       const userReturned = await this.getUserByIdUseCase.getUserById(userId);
 
       if (!userReturned) {
-        throw new UserNotFoundError(userId);
+        return userNotFoundResponse();
       }
 
       return success({
@@ -33,10 +32,6 @@ export class GetUserByIdController implements IGetUserByIdController {
       });
     } catch (error) {
       console.log(error);
-
-      if (error instanceof UserNotFoundError) {
-        return userNotFoundResponse();
-      }
 
       return internalServerError();
     }
