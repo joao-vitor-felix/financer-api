@@ -17,11 +17,7 @@ export class CreateUserController implements ICreateUserController {
     try {
       const params: CreateUserSchema = httpRequest.body;
 
-      const validation = createUserSchema.safeParse(params);
-
-      if (!validation.success) {
-        return badRequest("Some provided field is invalid");
-      }
+      createUserSchema.parse(params);
 
       const { firstName, lastName, email, password } = params;
 

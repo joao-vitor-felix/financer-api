@@ -15,6 +15,7 @@ import { IUpdateUserController, IUpdateUserUseCase } from "@/types";
 
 export class UpdateUserController implements IUpdateUserController {
   constructor(private updateUserUseCase: IUpdateUserUseCase) {}
+
   async updateUser(httpRequest: Request) {
     try {
       const userId = httpRequest.params.userId;
@@ -27,11 +28,7 @@ export class UpdateUserController implements IUpdateUserController {
         return invalidIdResponse();
       }
 
-      const validation = updateUserSchema.safeParse(params);
-
-      if (!validation.success) {
-        return badRequest("Some provided field is invalid");
-      }
+      updateUserSchema.parse(params);
 
       const updatedUser = await this.updateUserUseCase.updateUser(
         userId,

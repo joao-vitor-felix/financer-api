@@ -20,11 +20,7 @@ export class CreateTransactionController
     try {
       const params: CreateTransactionSchema = httpRequest.body;
 
-      const validation = await createTransactionSchema.safeParseAsync(params);
-
-      if (!validation.success) {
-        return badRequest("Some provided field is invalid");
-      }
+      await createTransactionSchema.parseAsync(params);
 
       const transaction =
         await this.createTransactionUseCase.createTransaction(params);

@@ -1,4 +1,5 @@
 import { Request } from "express";
+import { ZodError } from "zod";
 
 import {
   badRequest,
@@ -32,11 +33,7 @@ export class UpdateTransactionController
 
       const params: UpdateTransactionSchema = httpRequest.body;
 
-      const validation = await updateTransactionSchema.safeParseAsync(params);
-
-      if (!validation.success) {
-        return badRequest("Some provided field is invalid");
-      }
+      await updateTransactionSchema.parseAsync(params);
 
       const updatedTransaction =
         await this.updateTransactionUseCase.updateTransaction(
@@ -52,6 +49,10 @@ export class UpdateTransactionController
         data: updatedTransaction
       });
     } catch (error) {
+      if (error instanceof ZodError) {
+        return badRequest(error.errors[0].message);
+      }
+
       console.error(error);
 
       return internalServerError();
