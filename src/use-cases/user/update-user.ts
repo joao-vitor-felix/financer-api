@@ -16,27 +16,25 @@ export class UpdateUserUseCase implements IUpdateUserUseCase {
     private updateUserRepository: IUpdateUserRepository
   ) {}
 
-  async updateUser(userId: string, updateUserParams: UpdateUserSchema) {
+  async updateUser(userId: string, params: UpdateUserSchema) {
     const userReturned = await this.getUserByIdUseCase.getUserById(userId);
 
     if (!userReturned) {
       throw new UserNotFoundError(userId);
     }
 
-    if (updateUserParams.email) {
+    if (params.email) {
       const userWithProvidedEmail =
-        await this.getUserByEmailRepository.getUserByEmail(
-          updateUserParams.email
-        );
+        await this.getUserByEmailRepository.getUserByEmail(params.email);
       if (userWithProvidedEmail && userWithProvidedEmail.id !== userId) {
-        throw new EmailAlreadyInUseError(updateUserParams.email);
+        throw new EmailAlreadyInUseError(params.email);
       }
     }
 
-    const user = updateUserParams;
+    const user = params;
 
-    if (updateUserParams.password) {
-      const hashedPassword = await bcrypt.hash(updateUserParams.password, 10);
+    if (params.password) {
+      const hashedPassword = await bcrypt.hash(params.password, 10);
       user.password = hashedPassword;
     }
 
