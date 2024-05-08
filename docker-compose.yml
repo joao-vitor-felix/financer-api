@@ -13,3 +13,5 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
       POSTGRES_DB: financer
+volumes:
+  postgres:
