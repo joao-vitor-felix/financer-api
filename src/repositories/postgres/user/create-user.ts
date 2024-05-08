@@ -1,8 +1,9 @@
-import { CreateUserParams, ICreateUserRepository } from "@/types";
+import { CreateUserSchema } from "@/schemas";
+import { ICreateUserRepository } from "@/types";
 
 import { prisma } from "../../../../prisma/client";
 
-interface CreateUserRepositoryParams extends CreateUserParams {
+interface CreateUserRepositoryParams extends CreateUserSchema {
   password: string;
 }
 
