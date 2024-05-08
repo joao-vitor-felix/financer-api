@@ -54,6 +54,9 @@ export const createTransactionSchema = z
 export type CreateTransactionSchema = z.infer<typeof createTransactionSchema>;
 
 export const updateTransactionSchema = createTransactionSchema
+  .omit({
+    userId: true
+  })
   .partial()
   .strict({
     message: "Some provided field is not allowed."

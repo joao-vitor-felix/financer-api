@@ -1,4 +1,4 @@
-import { CreateTransactionSchema } from "@/schemas";
+import { CreateTransactionSchema, UpdateTransactionSchema } from "@/schemas";
 import { Transaction } from "@prisma/client";
 import { Response } from "@/controllers/helpers";
 import { Request } from "express";
@@ -13,6 +13,24 @@ export interface ICreateTransactionRepository {
 
 export interface ICreateTransactionUseCase {
   createTransaction(transaction: CreateTransactionSchema): Promise<Transaction>;
+}
+
+export interface IUpdateTransactionController {
+  updateTransaction(httpRequest: Request): Promise<Response<Transaction>>;
+}
+
+export interface IUpdateTransactionUseCase {
+  updateTransaction(
+    transactionId: string,
+    updateTransactionParams: UpdateTransactionSchema
+  ): Promise<Transaction | null>;
+}
+
+export interface IUpdateTransactionRepository {
+  updateTransaction(
+    transactionId: string,
+    updateTransactionParams: UpdateTransactionSchema
+  ): Promise<Transaction | null>;
 }
 
 export interface IGetTransactionsByUserIdController {

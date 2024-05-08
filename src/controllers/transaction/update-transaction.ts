@@ -1,4 +1,8 @@
-import { updateTransactionSchema } from "../../schemas/transaction.js";
+import {
+  IUpdateTransactionController,
+  IUpdateTransactionUseCase
+} from "@/types";
+import { UpdateTransactionSchema, updateTransactionSchema } from "@/schemas";
 import {
   badRequest,
   checkIfIdIsValid,
@@ -6,13 +10,16 @@ import {
   invalidIdResponse,
   success,
   transactionNotFoundResponse
-} from "../helpers/index.js";
+} from "@/controllers/helpers";
+import { Request } from "express";
 
-export class UpdateTransactionController {
-  constructor(updateTransactionUseCase) {
+export class UpdateTransactionController
+  implements IUpdateTransactionController
+{
+  constructor(private updateTransactionUseCase: IUpdateTransactionUseCase) {
     this.updateTransactionUseCase = updateTransactionUseCase;
   }
-  async updateTransaction(httpRequest) {
+  async updateTransaction(httpRequest: Request) {
     try {
       const transactionId = httpRequest.params.transactionId;
 
@@ -22,12 +29,12 @@ export class UpdateTransactionController {
         return invalidIdResponse();
       }
 
-      const params = httpRequest.body;
+      const params: UpdateTransactionSchema = httpRequest.body;
 
       const validation = await updateTransactionSchema.safeParseAsync(params);
 
       if (!validation.success) {
-        return badRequest({ message: "Some provided field is invalid" });
+        return badRequest("Some provided field is invalid");
       }
 
       const updatedTransaction =
@@ -40,7 +47,9 @@ export class UpdateTransactionController {
         return transactionNotFoundResponse();
       }
 
-      return success(updatedTransaction);
+      return success({
+        data: updatedTransaction
+      });
     } catch (error) {
       console.error(error);
 
