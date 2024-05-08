@@ -69,6 +69,10 @@ export interface IGetUserByEmailRepository {
   getUserByEmail(email: string): Promise<User | null>;
 }
 
+export interface IGetUserByIdController {
+  getUserById(httpRequest: Request): Promise<Response<User>>;
+}
+
 export interface IGetUserByIdUseCase {
   getUserById(id: string): Promise<User | null>;
 }

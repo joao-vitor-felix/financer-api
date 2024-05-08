@@ -1,17 +1,17 @@
-import { UserNotFoundError } from "../../errors/user.js";
+import { UserNotFoundError } from "@/errors/user";
 import {
   checkIfIdIsValid,
   invalidIdResponse,
   internalServerError,
   success,
   userNotFoundResponse
-} from "../helpers/index.js";
+} from "@/controllers/helpers";
+import { IGetUserByIdController, IGetUserByIdUseCase } from "@/types";
+import { Request } from "express";
 
-export class GetUserByIdController {
-  constructor(getUserByIdUseCase) {
-    this.getUserByIdUseCase = getUserByIdUseCase;
-  }
-  async getUserById(httpRequest) {
+export class GetUserByIdController implements IGetUserByIdController {
+  constructor(private getUserByIdUseCase: IGetUserByIdUseCase) {}
+  async getUserById(httpRequest: Request) {
     const userId = httpRequest.params.userId;
 
     try {
@@ -28,8 +28,7 @@ export class GetUserByIdController {
       }
 
       return success({
-        message: "User found successfully.",
-        response: userReturned
+        data: userReturned
       });
     } catch (error) {
       console.log(error);
@@ -37,6 +36,7 @@ export class GetUserByIdController {
       if (error instanceof UserNotFoundError) {
         return userNotFoundResponse();
       }
+
       return internalServerError();
     }
   }
