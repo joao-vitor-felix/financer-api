@@ -4,7 +4,6 @@ import {
   IGetUserBalanceUseCase,
   IGetUserByIdRepository
 } from "@/types";
-
 export class GetUserBalanceUseCase implements IGetUserBalanceUseCase {
   constructor(
     private getUserBalanceRepository: IGetUserBalanceRepository,

@@ -19,15 +19,13 @@ export class UpdateUserController implements IUpdateUserController {
   async updateUser(httpRequest: Request) {
     try {
       const userId = httpRequest.params.userId;
-
-      const params: UpdateUserSchema = httpRequest.body;
-
       const isUUID = checkIfIdIsValid(userId);
 
       if (!isUUID) {
         return invalidIdResponse();
       }
 
+      const params: UpdateUserSchema = httpRequest.body;
       updateUserSchema.parse(params);
 
       const updatedUser = await this.updateUserUseCase.updateUser(
