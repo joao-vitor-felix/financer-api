@@ -11,10 +11,10 @@ import {
 } from "@/controllers/helpers";
 import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors/user";
 import { UpdateUserSchema, updateUserSchema } from "@/schemas";
-import { IUpdateUserController, IUpdateUserUseCase } from "@/types";
+import { UpdateUserUseCase } from "@/use-cases";
 
-export class UpdateUserController implements IUpdateUserController {
-  constructor(private updateUserUseCase: IUpdateUserUseCase) {}
+export class UpdateUserController {
+  constructor(private updateUserUseCase: UpdateUserUseCase) {}
 
   async updateUser(httpRequest: Request) {
     try {
@@ -49,7 +49,6 @@ export class UpdateUserController implements IUpdateUserController {
         return notFound(error.message);
       }
 
-      console.error(error);
       return internalServerError();
     }
   }

@@ -8,15 +8,14 @@ import {
   success
 } from "@/controllers/helpers";
 import { UserNotFoundError } from "@/errors/user";
-import { IDeleteUserController, IDeleteUserUseCase } from "@/types";
+import { DeleteUserUseCase } from "@/use-cases";
 
-export class DeleteUserController implements IDeleteUserController {
-  constructor(private deleteUserUseCase: IDeleteUserUseCase) {}
+export class DeleteUserController {
+  constructor(private deleteUserUseCase: DeleteUserUseCase) {}
 
   async deleteUser(httpRequest: Request) {
     try {
       const userId = httpRequest.params.userId;
-
       const isUUID = checkIfIdIsValid(userId);
 
       if (!isUUID) {
@@ -24,14 +23,11 @@ export class DeleteUserController implements IDeleteUserController {
       }
 
       await this.deleteUserUseCase.deleteUser(userId);
-
       return success({ data: null });
     } catch (error) {
       if (error instanceof UserNotFoundError) {
         return notFound(error.message);
       }
-
-      console.error(error);
       return internalServerError();
     }
   }

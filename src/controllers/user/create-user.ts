@@ -8,17 +8,15 @@ import {
 } from "@/controllers/helpers";
 import { EmailAlreadyInUseError } from "@/errors/user";
 import { CreateUserSchema, createUserSchema } from "@/schemas";
-import { ICreateUserController, ICreateUserUseCase } from "@/types";
+import { CreateUserUseCase } from "@/use-cases";
 
-export class CreateUserController implements ICreateUserController {
-  constructor(private createUserUseCase: ICreateUserUseCase) {}
+export class CreateUserController {
+  constructor(private createUserUseCase: CreateUserUseCase) {}
 
   async createUser(httpRequest: Request) {
     try {
       const params: CreateUserSchema = httpRequest.body;
-
       createUserSchema.parse(params);
-
       const { firstName, lastName, email, password } = params;
 
       const user = await this.createUserUseCase.createUser({
@@ -27,7 +25,6 @@ export class CreateUserController implements ICreateUserController {
         email,
         password
       });
-
       return created({
         data: user
       });
@@ -40,7 +37,6 @@ export class CreateUserController implements ICreateUserController {
         return badRequest(error.message);
       }
 
-      console.log(error);
       return internalServerError();
     }
   }

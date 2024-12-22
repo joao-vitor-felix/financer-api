@@ -8,24 +8,21 @@ import {
   userNotFoundResponse
 } from "@/controllers/helpers";
 import { UserNotFoundError } from "@/errors/user";
-import { IGetUserBalanceController, IGetUserBalanceUseCase } from "@/types";
+import { GetUserBalanceUseCase } from "@/use-cases";
 
-export class GetUserBalanceController implements IGetUserBalanceController {
-  constructor(private getUserBalanceUseCase: IGetUserBalanceUseCase) {}
+export class GetUserBalanceController {
+  constructor(private getUserBalanceUseCase: GetUserBalanceUseCase) {}
 
   async getUserBalance(httpRequest: Request) {
     const userId = httpRequest.params.userId;
-
     try {
       const isUUID = checkIfIdIsValid(userId);
-
       if (!isUUID) {
         return invalidIdResponse();
       }
 
       const userBalance =
         await this.getUserBalanceUseCase.getUserBalance(userId);
-
       return success({
         data: userBalance
       });
@@ -33,8 +30,6 @@ export class GetUserBalanceController implements IGetUserBalanceController {
       if (error instanceof UserNotFoundError) {
         return userNotFoundResponse();
       }
-
-      console.error(error);
       return internalServerError();
     }
   }
