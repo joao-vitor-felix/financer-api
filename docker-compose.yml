@@ -1,8 +1,7 @@
-version: "3.4"
 services:
   postgres:
     image: postgres:latest
-    container_name: financer-app
+    container_name: postgres
     ports:
       - "5432:5432"
     expose:
