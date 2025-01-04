@@ -12,7 +12,8 @@
     "test:watch": "vitest watch --passWithNoTests",
     "test:ci": "vitest run --coverage --passWithNoTests",
     "test:ui": "vitest --ui --passWithNoTests",
-    "postinstall": "husky && prisma generate"
+    "postinstall": "husky && prisma generate",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
