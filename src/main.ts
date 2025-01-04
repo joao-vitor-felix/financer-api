@@ -30,7 +30,7 @@ app.get("/api/users/:userId/balance", async (request, response) => {
 
 app.post("/api/users", async (request, response) => {
   const createUserController = makeCreateUserController();
-  const { statusCode, body } = await createUserController.createUser(request);
+  const { statusCode, body } = await createUserController.execute(request);
   response.status(statusCode).send(body);
 });
 

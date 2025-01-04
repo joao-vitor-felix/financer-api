@@ -13,18 +13,19 @@ import { CreateUserUseCase } from "@/use-cases";
 export class CreateUserController {
   constructor(private createUserUseCase: CreateUserUseCase) {}
 
-  async createUser(httpRequest: Request) {
+  async execute(httpRequest: Request) {
     try {
       const params: CreateUserSchema = httpRequest.body;
       createUserSchema.parse(params);
-      const { firstName, lastName, email, password } = params;
 
-      const user = await this.createUserUseCase.createUser({
+      const { firstName, lastName, email, password } = params;
+      const user = await this.createUserUseCase.execute({
         firstName,
         lastName,
         email,
         password
       });
+
       return created({
         data: user
       });

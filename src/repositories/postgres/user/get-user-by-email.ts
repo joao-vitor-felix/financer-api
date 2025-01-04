@@ -1,11 +1,11 @@
-import { IGetUserByEmailRepository } from "@/types/user";
+import { prisma } from "@root/prisma/client";
 
-import { prisma } from "../../../../prisma/client";
+import { IGetUserByEmailRepository } from "@/types/user";
 
 export class PostgresGetUserByEmailRepository
   implements IGetUserByEmailRepository
 {
-  async getUserByEmail(email: string) {
+  async execute(email: string) {
     const userReturned = await prisma.user.findUnique({
       where: {
         email

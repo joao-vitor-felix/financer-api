@@ -2,21 +2,18 @@ import bcrypt from "bcrypt";
 
 import { EmailAlreadyInUseError } from "@/errors/user";
 import { CreateUserSchema } from "@/schemas";
-import {
-  ICreateUserRepository,
-  ICreateUserUseCase,
-  IGetUserByEmailRepository
-} from "@/types";
+import { ICreateUserRepository, IGetUserByEmailRepository } from "@/types";
 
-export class CreateUserUseCase implements ICreateUserUseCase {
+export class CreateUserUseCase {
   constructor(
     private getUserByEmailRepository: IGetUserByEmailRepository,
     private createUserRepository: ICreateUserRepository
   ) {}
 
-  async createUser(params: CreateUserSchema) {
-    const isEmailAlreadyInUse =
-      await this.getUserByEmailRepository.getUserByEmail(params.email);
+  async execute(params: CreateUserSchema) {
+    const isEmailAlreadyInUse = await this.getUserByEmailRepository.execute(
+      params.email
+    );
 
     if (isEmailAlreadyInUse) {
       throw new EmailAlreadyInUseError(params.email);
@@ -32,7 +29,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       password: hashedPassword
     };
 
-    const createdUser = await this.createUserRepository.createUser(user);
+    const createdUser = await this.createUserRepository.execute(user);
     return createdUser;
   }
 }
