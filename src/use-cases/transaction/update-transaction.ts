@@ -1,18 +1,12 @@
 import { UpdateTransactionSchema } from "@/schemas";
-import {
-  IUpdateTransactionRepository,
-  IUpdateTransactionUseCase
-} from "@/types";
+import { IUpdateTransactionRepository } from "@/types";
 
-export class UpdateTransactionUseCase implements IUpdateTransactionUseCase {
+export class UpdateTransactionUseCase {
   constructor(
     private updateTransactionRepository: IUpdateTransactionRepository
   ) {}
 
-  async updateTransaction(
-    transactionId: string,
-    params: UpdateTransactionSchema
-  ) {
+  async execute(transactionId: string, params: UpdateTransactionSchema) {
     const transaction =
       await this.updateTransactionRepository.updateTransaction(
         transactionId,

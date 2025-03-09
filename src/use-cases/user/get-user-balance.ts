@@ -1,16 +1,12 @@
 import { UserNotFoundError } from "@/errors/user";
-import {
-  IGetUserBalanceRepository,
-  IGetUserBalanceUseCase,
-  IGetUserByIdRepository
-} from "@/types";
-export class GetUserBalanceUseCase implements IGetUserBalanceUseCase {
+import { IGetUserBalanceRepository, IGetUserByIdRepository } from "@/types";
+export class GetUserBalanceUseCase {
   constructor(
     private getUserBalanceRepository: IGetUserBalanceRepository,
     private getUserByIdRepository: IGetUserByIdRepository
   ) {}
 
-  async getUserBalance(userId: string) {
+  async execute(userId: string) {
     const user = await this.getUserByIdRepository.getUserById(userId);
 
     if (!user) {

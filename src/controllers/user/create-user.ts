@@ -26,12 +26,10 @@ export class CreateUserController {
         password
       });
 
-      return created({
-        data: user
-      });
+      return created(user);
     } catch (error) {
       if (error instanceof ZodError) {
-        return badRequest(error.errors[0].message);
+        return badRequest(error.errors[0]?.message);
       }
 
       if (error instanceof EmailAlreadyInUseError) {

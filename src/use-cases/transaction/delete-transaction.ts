@@ -1,19 +1,15 @@
-import {
-  IDeleteTransactionRepository,
-  IDeleteTransactionUseCase
-} from "@/types";
+import { IDeleteTransactionRepository } from "@/types";
 
-export class DeleteTransactionUseCase implements IDeleteTransactionUseCase {
+export class DeleteTransactionUseCase {
   constructor(
     private deleteTransactionRepository: IDeleteTransactionRepository
   ) {
     this.deleteTransactionRepository = deleteTransactionRepository;
   }
 
-  async deleteTransaction(transactionId: string) {
+  async execute(transactionId: string) {
     const transaction =
       await this.deleteTransactionRepository.deleteTransaction(transactionId);
-
     return transaction;
   }
 }

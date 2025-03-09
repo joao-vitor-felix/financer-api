@@ -1,10 +1,10 @@
-import { IGetUserByIdRepository, IGetUserByIdUseCase } from "@/types";
+import { IGetUserByIdRepository } from "@/types";
 
-export class GetUserByIdUseCase implements IGetUserByIdUseCase {
+export class GetUserByIdUseCase {
   constructor(private getUserByIdRepository: IGetUserByIdRepository) {}
-  async getUserById(id: string) {
-    const userReturned = await this.getUserByIdRepository.getUserById(id);
 
+  async execute(id: string) {
+    const userReturned = await this.getUserByIdRepository.getUserById(id);
     return userReturned;
   }
 }

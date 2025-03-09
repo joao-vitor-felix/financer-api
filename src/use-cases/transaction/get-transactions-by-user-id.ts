@@ -1,19 +1,14 @@
 import { UserNotFoundError } from "@/errors/user";
 import { IGetUserByIdRepository } from "@/types";
-import {
-  IGetTransactionsByUserIdRepository,
-  IGetTransactionsByUserIdUseCase
-} from "@/types/transaction.js";
+import { IGetTransactionsByUserIdRepository } from "@/types/transaction.js";
 
-export class GetTransactionsByUserIdUseCase
-  implements IGetTransactionsByUserIdUseCase
-{
+export class GetTransactionsByUserIdUseCase {
   constructor(
     private getTransactionsByUserIdRepository: IGetTransactionsByUserIdRepository,
     private getUserByIdRepository: IGetUserByIdRepository
   ) {}
 
-  async getTransactions(userId: string) {
+  async execute(userId: string) {
     const user = await this.getUserByIdRepository.getUserById(userId);
 
     if (!user) {

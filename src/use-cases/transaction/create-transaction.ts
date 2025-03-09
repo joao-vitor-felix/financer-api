@@ -1,18 +1,14 @@
 import { UserNotFoundError } from "@/errors/user";
 import { CreateTransactionSchema } from "@/schemas";
-import {
-  ICreateTransactionRepository,
-  ICreateTransactionUseCase,
-  IGetUserByIdRepository
-} from "@/types";
+import { ICreateTransactionRepository, IGetUserByIdRepository } from "@/types";
 
-export class CreateTransactionUseCase implements ICreateTransactionUseCase {
+export class CreateTransactionUseCase {
   constructor(
     private createTransactionRepository: ICreateTransactionRepository,
     private getUserByIdRepository: IGetUserByIdRepository
   ) {}
 
-  async createTransaction(params: CreateTransactionSchema) {
+  async execute(params: CreateTransactionSchema) {
     const { userId, name, date, type, amount } = params;
 
     const user = this.getUserByIdRepository.getUserById(userId);

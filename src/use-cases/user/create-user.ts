@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import { EmailAlreadyInUseError } from "@/errors/user";
 import { CreateUserSchema } from "@/schemas";

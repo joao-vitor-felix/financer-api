@@ -10,18 +10,12 @@ import {
   transactionNotFoundResponse
 } from "@/controllers/helpers";
 import { UpdateTransactionSchema, updateTransactionSchema } from "@/schemas";
-import {
-  IUpdateTransactionController,
-  IUpdateTransactionUseCase
-} from "@/types";
+import { UpdateTransactionUseCase } from "@/use-cases";
 
-export class UpdateTransactionController
-  implements IUpdateTransactionController
-{
-  constructor(private updateTransactionUseCase: IUpdateTransactionUseCase) {
-    this.updateTransactionUseCase = updateTransactionUseCase;
-  }
-  async updateTransaction(httpRequest: Request) {
+export class UpdateTransactionController {
+  constructor(private updateTransactionUseCase: UpdateTransactionUseCase) {}
+
+  async execute(httpRequest: Request) {
     try {
       const transactionId = httpRequest.params.transactionId;
 
@@ -35,11 +29,10 @@ export class UpdateTransactionController
 
       await updateTransactionSchema.parseAsync(params);
 
-      const updatedTransaction =
-        await this.updateTransactionUseCase.updateTransaction(
-          httpRequest.params.transactionId,
-          params
-        );
+      const updatedTransaction = await this.updateTransactionUseCase.execute(
+        httpRequest.params.transactionId,
+        params
+      );
 
       if (!updatedTransaction) {
         return transactionNotFoundResponse();

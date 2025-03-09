@@ -13,16 +13,14 @@ import { GetUserBalanceUseCase } from "@/use-cases";
 export class GetUserBalanceController {
   constructor(private getUserBalanceUseCase: GetUserBalanceUseCase) {}
 
-  async getUserBalance(httpRequest: Request) {
+  async execute(httpRequest: Request) {
     const userId = httpRequest.params.userId;
     try {
       const isUUID = checkIfIdIsValid(userId);
       if (!isUUID) {
         return invalidIdResponse();
       }
-
-      const userBalance =
-        await this.getUserBalanceUseCase.getUserBalance(userId);
+      const userBalance = await this.getUserBalanceUseCase.execute(userId);
       return success({
         data: userBalance
       });

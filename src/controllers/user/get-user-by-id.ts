@@ -12,7 +12,7 @@ import { GetUserByIdUseCase } from "@/use-cases";
 export class GetUserByIdController {
   constructor(private getUserByIdUseCase: GetUserByIdUseCase) {}
 
-  async getUserById(httpRequest: Request) {
+  async execute(httpRequest: Request) {
     const userId = httpRequest.params.userId;
     try {
       const isUUID = checkIfIdIsValid(userId);
@@ -20,7 +20,7 @@ export class GetUserByIdController {
         return invalidIdResponse();
       }
 
-      const userReturned = await this.getUserByIdUseCase.getUserById(userId);
+      const userReturned = await this.getUserByIdUseCase.execute(userId);
       if (!userReturned) {
         return userNotFoundResponse();
       }

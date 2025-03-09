@@ -16,7 +16,7 @@ import { UpdateUserUseCase } from "@/use-cases";
 export class UpdateUserController {
   constructor(private updateUserUseCase: UpdateUserUseCase) {}
 
-  async updateUser(httpRequest: Request) {
+  async execute(httpRequest: Request) {
     try {
       const userId = httpRequest.params.userId;
       const isUUID = checkIfIdIsValid(userId);

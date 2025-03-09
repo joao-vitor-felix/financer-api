@@ -13,7 +13,7 @@ import { DeleteUserUseCase } from "@/use-cases";
 export class DeleteUserController {
   constructor(private deleteUserUseCase: DeleteUserUseCase) {}
 
-  async deleteUser(httpRequest: Request) {
+  async execute(httpRequest: Request) {
     try {
       const userId = httpRequest.params.userId;
       const isUUID = checkIfIdIsValid(userId);
@@ -22,7 +22,7 @@ export class DeleteUserController {
         return invalidIdResponse();
       }
 
-      await this.deleteUserUseCase.deleteUser(userId);
+      await this.deleteUserUseCase.execute(userId);
       return success({ data: null });
     } catch (error) {
       if (error instanceof UserNotFoundError) {

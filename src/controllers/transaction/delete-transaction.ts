@@ -7,19 +7,12 @@ import {
   success,
   transactionNotFoundResponse
 } from "@/controllers/helpers";
-import {
-  IDeleteTransactionController,
-  IDeleteTransactionUseCase
-} from "@/types";
+import { DeleteTransactionUseCase } from "@/use-cases";
 
-export class DeleteTransactionController
-  implements IDeleteTransactionController
-{
-  constructor(private deleteTransactionUseCase: IDeleteTransactionUseCase) {
-    this.deleteTransactionUseCase = deleteTransactionUseCase;
-  }
+export class DeleteTransactionController {
+  constructor(private deleteTransactionUseCase: DeleteTransactionUseCase) {}
 
-  async deleteTransaction(httpRequest: Request) {
+  async execute(httpRequest: Request) {
     try {
       const transactionId = httpRequest.params.transactionId;
       const isUUID = checkIfIdIsValid(transactionId);
@@ -29,7 +22,7 @@ export class DeleteTransactionController
       }
 
       const response =
-        await this.deleteTransactionUseCase.deleteTransaction(transactionId);
+        await this.deleteTransactionUseCase.execute(transactionId);
 
       if (response === null) {
         return transactionNotFoundResponse();

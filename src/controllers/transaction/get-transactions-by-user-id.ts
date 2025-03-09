@@ -9,19 +9,14 @@ import {
   userNotFoundResponse
 } from "@/controllers/helpers";
 import { UserNotFoundError } from "@/errors/user";
-import {
-  IGetTransactionsByUserIdController,
-  IGetTransactionsByUserIdUseCase
-} from "@/types";
+import { GetTransactionsByUserIdUseCase } from "@/use-cases";
 
-export class GetTransactionsByUserIdController
-  implements IGetTransactionsByUserIdController
-{
+export class GetTransactionsByUserIdController {
   constructor(
-    private getTransactionsByUserIdUseCase: IGetTransactionsByUserIdUseCase
+    private getTransactionsByUserIdUseCase: GetTransactionsByUserIdUseCase
   ) {}
 
-  async getTransactions(httpRequest: Request) {
+  async execute(httpRequest: Request) {
     try {
       const userId = httpRequest.query.userId as string;
 
@@ -36,7 +31,7 @@ export class GetTransactionsByUserIdController
       }
 
       const transactions =
-        await this.getTransactionsByUserIdUseCase.getTransactions(userId);
+        await this.getTransactionsByUserIdUseCase.execute(userId);
 
       return success({
         data: transactions
