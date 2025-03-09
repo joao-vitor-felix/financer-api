@@ -1,7 +1,6 @@
+import { prisma } from "@/lib/client";
 import { UpdateTransactionSchema } from "@/schemas";
 import { IUpdateTransactionRepository } from "@/types";
-
-import { prisma } from "../../../../prisma/client";
 
 export class PostgresUpdateTransactionRepository
   implements IUpdateTransactionRepository
@@ -20,6 +19,7 @@ export class PostgresUpdateTransactionRepository
 
       return transaction;
     } catch (error) {
+      console.error(error);
       return null;
     }
   }

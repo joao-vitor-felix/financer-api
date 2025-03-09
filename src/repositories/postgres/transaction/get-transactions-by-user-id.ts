@@ -1,6 +1,5 @@
+import { prisma } from "@/lib/client";
 import { IGetTransactionsByUserIdRepository } from "@/types/transaction.js";
-
-import { prisma } from "../../../../prisma/client";
 
 export class PostgresGetTransactionsByUserIdRepository
   implements IGetTransactionsByUserIdRepository

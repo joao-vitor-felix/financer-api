@@ -1,5 +1,4 @@
-import { prisma } from "@root/prisma/client";
-
+import { prisma } from "@/lib/client";
 import { CreateUserSchema } from "@/schemas";
 import { ICreateUserRepository } from "@/types";
 

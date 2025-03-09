@@ -1,6 +1,5 @@
+import { prisma } from "@/lib/client";
 import { IDeleteUserRepository } from "@/types";
-
-import { prisma } from "../../../../prisma/client";
 
 export class PostgresDeleteUserRepository implements IDeleteUserRepository {
   async deleteUser(id: string) {
