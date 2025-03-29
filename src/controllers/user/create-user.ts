@@ -36,6 +36,7 @@ export class CreateUserController {
         return badRequest(error.message);
       }
 
+      console.error(error);
       return internalServerError();
     }
   }
