@@ -3,29 +3,26 @@ import z from "zod";
 export const createUserSchema = z
   .object({
     firstName: z
-      .string({ required_error: "First name not provided." })
+      .string({ message: "firstName must be a string." })
       .trim()
       .min(1, {
-        message: "First name must contain at least 1 character."
+        message: "firstName must contain at least 1 character."
       }),
     lastName: z
-      .string({ required_error: "Last name not provided." })
+      .string({ message: "lastName must be a string." })
       .trim()
       .min(1, {
-        message: "Last name must contain at least 1 character."
+        message: "lastName must contain at least 1 character."
       }),
     email: z
-      .string({ required_error: "Email not provided." })
-      .email({ message: "Please, provide a valid email." })
-      .trim()
-      .min(1, {
-        message: "Please, provide an email."
-      }),
+      .string({ message: "email must be a string." })
+      .email({ message: "Provide a valid email." })
+      .trim(),
     password: z
-      .string({ required_error: "Password not provided." })
+      .string({ message: "password must be a string." })
       .trim()
       .min(6, {
-        message: "Password must contain at least 6 characters."
+        message: "password must contain at least 6 characters."
       })
   })
   .strict({
