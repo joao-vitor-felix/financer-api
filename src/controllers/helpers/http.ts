@@ -17,7 +17,9 @@ export const created = <T>(response: T): SuccessResponse<T> => {
   };
 };
 
-export const success = <T>(response: T): SuccessResponse<T> => {
+export const success = <T>(
+  response: T | undefined = undefined
+): SuccessResponse<T | undefined> => {
   return {
     statusCode: 200,
     body: response
