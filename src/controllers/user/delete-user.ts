@@ -23,11 +23,13 @@ export class DeleteUserController {
       }
 
       await this.deleteUserUseCase.execute(userId);
-      return success({ data: null });
+      return success();
     } catch (error) {
       if (error instanceof UserNotFoundError) {
         return notFound(error.message);
       }
+
+      console.error(error);
       return internalServerError();
     }
   }
