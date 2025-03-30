@@ -11,7 +11,7 @@
     "test": "vitest run --passWithNoTests",
     "test:watch": "vitest watch --passWithNoTests",
     "test:ci": "vitest run --coverage --passWithNoTests",
-    "test:ui": "vitest --ui --passWithNoTests",
+    "test:ui": "vitest --ui --passWithNoTests --coverage.enabled=true",
     "postinstall": "husky && prisma generate",
     "typecheck": "tsc --noEmit"
   },
