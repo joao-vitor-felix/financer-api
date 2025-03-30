@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { faker } from "@faker-js/faker";
 import { Request } from "express";
 
 import { DeleteUserController } from "@/controllers";
@@ -27,7 +28,7 @@ describe("DeleteUserController", () => {
 
   const httpRequest = {
     params: {
-      userId: "3ea1083c-d6c4-448d-8e16-92b3245a23ee"
+      userId: faker.string.uuid()
     }
   } as Request<{ userId: string }>;
 
@@ -54,7 +55,7 @@ describe("DeleteUserController", () => {
   it("should return 404 when DeleteUserUseCase throws UserNotFoundError", async () => {
     const { sut, deleteUserUseCaseStub } = makeSut();
     vi.spyOn(deleteUserUseCaseStub, "execute").mockImplementationOnce(() => {
-      throw new UserNotFoundError("3ea1083c-d6c4-448d-8e16-92b3245a23ee");
+      throw new UserNotFoundError(httpRequest.params.userId);
     });
 
     const result = (await sut.execute(httpRequest)) as ErrorResponse;
