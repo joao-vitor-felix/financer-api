@@ -10,7 +10,7 @@ describe("CreateUserController", () => {
   class CreateUserUseCaseStub {
     constructor() {}
 
-    execute(user: any) {
+    async execute(user: any) {
       return user;
     }
   }
