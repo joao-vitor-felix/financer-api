@@ -43,20 +43,21 @@ describe("DeleteUserController", () => {
   it("should return 400 when userId is not valid", async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute({
+    const result = (await sut.execute({
       params: {
         userId: "invalid-id"
       }
-    } as Request<{ userId: string }>);
+    } as Request<{ userId: string }>)) as ErrorResponse;
 
     expect(result.statusCode).toBe(400);
+    expect(result.body.message).toMatch(/not valid/i);
   });
 
   it("should return 404 when DeleteUserUseCase throws UserNotFoundError", async () => {
     const { sut, deleteUserUseCaseStub } = makeSut();
-    vi.spyOn(deleteUserUseCaseStub, "execute").mockImplementationOnce(() => {
-      throw new UserNotFoundError(httpRequest.params.userId);
-    });
+    vi.spyOn(deleteUserUseCaseStub, "execute").mockRejectedValueOnce(
+      new UserNotFoundError(httpRequest.params.userId)
+    );
 
     const result = (await sut.execute(httpRequest)) as ErrorResponse;
 
@@ -66,9 +67,9 @@ describe("DeleteUserController", () => {
 
   it("should return 500 when DeleteUserUseCase throws an unknown error", async () => {
     const { sut, deleteUserUseCaseStub } = makeSut();
-    vi.spyOn(deleteUserUseCaseStub, "execute").mockImplementationOnce(() => {
-      throw new Error("Unknown error");
-    });
+    vi.spyOn(deleteUserUseCaseStub, "execute").mockRejectedValueOnce(
+      new Error("Server error")
+    );
 
     const result = (await sut.execute(httpRequest)) as ErrorResponse;
 
