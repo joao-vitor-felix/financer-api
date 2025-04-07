@@ -14,20 +14,22 @@ export class GetUserBalanceController {
   constructor(private getUserBalanceUseCase: GetUserBalanceUseCase) {}
 
   async execute(httpRequest: Request) {
-    const userId = httpRequest.params.userId;
     try {
+      const userId = httpRequest.params.userId;
       const isUUID = checkIfIdIsValid(userId);
+
       if (!isUUID) {
         return invalidIdResponse();
       }
-      const userBalance = await this.getUserBalanceUseCase.execute(userId);
-      return success({
-        data: userBalance
-      });
+
+      const balance = await this.getUserBalanceUseCase.execute(userId);
+      return success(balance);
     } catch (error) {
       if (error instanceof UserNotFoundError) {
         return userNotFoundResponse();
       }
+
+      console.error(error);
       return internalServerError();
     }
   }

@@ -1,4 +1,5 @@
-import { Prisma, User } from "@prisma/client";
+import { User } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 
 import { CreateUserSchema, UpdateUserSchema } from "@/schemas";
 
@@ -14,15 +15,15 @@ export interface IDeleteUserRepository {
   deleteUser(id: string): Promise<void>;
 }
 
-interface UserBalance {
-  earnings: Prisma.Decimal;
-  expenses: Prisma.Decimal;
-  investments: Prisma.Decimal;
-  balance: Prisma.Decimal;
-}
+export type Balance = {
+  earnings: Decimal;
+  expenses: Decimal;
+  investments: Decimal;
+  balance: Decimal;
+};
 
 export interface IGetUserBalanceRepository {
-  getUserBalance(userId: string): Promise<UserBalance>;
+  getUserBalance(userId: string): Promise<Balance>;
 }
 
 export interface IGetUserByEmailRepository {
