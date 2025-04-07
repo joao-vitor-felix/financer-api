@@ -22,8 +22,8 @@ describe("CreateUserController", () => {
     );
 
     return {
-      sut,
-      createUserUseCase
+      createUserUseCase,
+      sut
     };
   }
 
@@ -45,6 +45,16 @@ describe("CreateUserController", () => {
 
     expect(result.statusCode).toBe(201);
     expect(result.body).toEqual(httpRequest.body);
+  });
+
+  it("should call CreateUserUseCase with correct values", async () => {
+    const { sut, createUserUseCase } = makeSut();
+    const spy = vi.spyOn(createUserUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledWith(httpRequest.body);
+    expect(spy).toHaveBeenCalledOnce();
   });
 
   it.each([
@@ -136,7 +146,7 @@ describe("CreateUserController", () => {
       },
       errorMessage: /not allowed/i
     }
-  ])(`should throw an error when $scenario`, async ({ body, errorMessage }) => {
+  ])(`should return 400 when $scenario`, async ({ body, errorMessage }) => {
     const { sut } = makeSut();
     const result = (await sut.execute({
       body
@@ -146,37 +156,27 @@ describe("CreateUserController", () => {
     expect(result.body.message).toMatch(errorMessage);
   });
 
-  it("should call CreateUserUseCase with correct values", async () => {
-    const { sut, createUserUseCase } = makeSut();
-
-    const spy = vi.spyOn(createUserUseCase, "execute");
-    await sut.execute(httpRequest);
-
-    expect(spy).toHaveBeenCalledWith(httpRequest.body);
-    expect(spy).toHaveBeenCalledOnce();
-  });
-
-  it("should return 500 if CreateUserUseCase throws an unknown error", async () => {
-    const { sut, createUserUseCase } = makeSut();
-
-    vi.spyOn(createUserUseCase, "execute").mockImplementationOnce(() => {
-      throw new Error("Internal server error");
-    });
-    const result = (await sut.execute(httpRequest)) as ErrorResponse;
-
-    expect(result.statusCode).toBe(500);
-    expect(result.body.message).toMatch(/server error/i);
-  });
-
   it("should return 400 when CreateUserUseCase throws EmailAlreadyInUseError", async () => {
     const { sut, createUserUseCase } = makeSut();
+    vi.spyOn(createUserUseCase, "execute").mockRejectedValueOnce(
+      new EmailAlreadyInUseError(httpRequest.body.email)
+    );
 
-    vi.spyOn(createUserUseCase, "execute").mockImplementationOnce(() => {
-      throw new EmailAlreadyInUseError(httpRequest.body.email);
-    });
     const result = (await sut.execute(httpRequest)) as ErrorResponse;
 
     expect(result.statusCode).toBe(400);
     expect(result.body.message).toMatch(/already in use/i);
+  });
+
+  it("should return 500 if CreateUserUseCase throws an unknown error", async () => {
+    const { sut, createUserUseCase } = makeSut();
+    vi.spyOn(createUserUseCase, "execute").mockRejectedValueOnce(
+      new Error("Internal server error")
+    );
+
+    const result = (await sut.execute(httpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(500);
+    expect(result.body.message).toMatch(/server error/i);
   });
 });
