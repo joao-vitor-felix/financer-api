@@ -1,4 +1,5 @@
 import { faker } from "@faker-js/faker";
+import { User } from "@prisma/client";
 import { Request } from "express";
 
 import { CreateUserController } from "@/controllers";
@@ -10,7 +11,7 @@ describe("CreateUserController", () => {
   class CreateUserUseCaseStub {
     constructor() {}
 
-    async execute(user: any) {
+    async execute(user: User): Promise<User> {
       return user;
     }
   }
