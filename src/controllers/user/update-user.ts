@@ -28,14 +28,8 @@ export class UpdateUserController {
       const params: UpdateUserSchema = httpRequest.body;
       updateUserSchema.parse(params);
 
-      const updatedUser = await this.updateUserUseCase.updateUser(
-        userId,
-        params
-      );
-
-      return success({
-        data: updatedUser
-      });
+      const user = await this.updateUserUseCase.execute(userId, params);
+      return success(user);
     } catch (error) {
       if (error instanceof ZodError) {
         return badRequest(error.errors[0].message);
