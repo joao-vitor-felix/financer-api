@@ -4,32 +4,31 @@ import {
   checkIfIdIsValid,
   internalServerError,
   invalidIdResponse,
-  success,
-  userNotFoundResponse
+  notFound,
+  success
 } from "@/controllers/helpers";
+import { UserNotFoundError } from "@/errors/user";
 import { GetUserByIdUseCase } from "@/use-cases";
 
 export class GetUserByIdController {
   constructor(private getUserByIdUseCase: GetUserByIdUseCase) {}
 
   async execute(httpRequest: Request) {
-    const userId = httpRequest.params.userId;
     try {
+      const userId = httpRequest.params.userId;
       const isUUID = checkIfIdIsValid(userId);
+
       if (!isUUID) {
         return invalidIdResponse();
       }
 
-      const userReturned = await this.getUserByIdUseCase.execute(userId);
-      if (!userReturned) {
-        return userNotFoundResponse();
+      const user = await this.getUserByIdUseCase.execute(userId);
+      return success(user);
+    } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return notFound(error.message);
       }
-
-      return success({
-        data: userReturned
-      });
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (_error) {
+      console.error(error);
       return internalServerError();
     }
   }
