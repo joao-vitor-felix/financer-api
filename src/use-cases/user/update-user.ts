@@ -13,10 +13,10 @@ export class UpdateUserUseCase {
     private updateUserRepository: IUpdateUserRepository
   ) {}
 
-  async updateUser(userId: string, params: UpdateUserSchema) {
-    const userReturned = await this.getUserByIdUseCase.execute(userId);
+  async execute(userId: string, params: UpdateUserSchema) {
+    const userFound = await this.getUserByIdUseCase.execute(userId);
 
-    if (!userReturned) {
+    if (!userFound) {
       throw new UserNotFoundError(userId);
     }
 
@@ -24,22 +24,18 @@ export class UpdateUserUseCase {
       const userWithProvidedEmail = await this.getUserByEmailRepository.execute(
         params.email
       );
+
       if (userWithProvidedEmail && userWithProvidedEmail.id !== userId) {
         throw new EmailAlreadyInUseError(params.email);
       }
     }
 
-    const user = params;
-
     if (params.password) {
       const hashedPassword = await bcrypt.hash(params.password, 10);
-      user.password = hashedPassword;
+      params.password = hashedPassword;
     }
 
-    const updatedUser = await this.updateUserRepository.updateUser(
-      userId,
-      user
-    );
-    return updatedUser;
+    const user = await this.updateUserRepository.updateUser(userId, params);
+    return user;
   }
 }
