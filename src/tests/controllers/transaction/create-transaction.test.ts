@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import type { Request } from "express";
 
 import { CreateTransactionController } from "@/controllers";
+import { ErrorResponse } from "@/controllers/helpers";
 import { CreateTransactionSchema } from "@/schemas";
 import { CreateTransactionUseCase } from "@/use-cases";
 
@@ -47,7 +48,6 @@ describe("CreateTransactionController", () => {
 
   it("should call CreateTransactionUseCase with correct params", async () => {
     const { sut, createTransactionUseCase } = makeSut();
-
     const spy = vi.spyOn(createTransactionUseCase, "execute");
 
     await sut.execute(httpRequest);
@@ -56,7 +56,7 @@ describe("CreateTransactionController", () => {
     expect(spy).toHaveBeenCalledWith(httpRequest.body);
   });
 
-  it.todo.each([
+  it.each([
     {
       scenario: "name is not a string",
       httpRequest: {
@@ -125,21 +125,29 @@ describe("CreateTransactionController", () => {
           amount: 0
         }
       },
-      erroMessage: /must be a grater than 0/i
+      erroMessage: /lower than 1/i
     },
     {
-      scenario: "amount is negative",
+      scenario: "when an unallowed field is provided",
       httpRequest: {
         body: {
           ...httpRequest.body,
-          amount: -1
+          role: "ADMIN"
         }
       },
-      erroMessage: /must be a valid currency/i
+      erroMessage: /field is not allowed/i
     }
   ])(
     "should return 400 when $scenario",
-    async ({ httpRequest, erroMessage }) => {}
+    async ({ httpRequest, erroMessage }) => {
+      const { sut } = makeSut();
+
+      const result = (await sut.execute(
+        httpRequest as Request
+      )) as ErrorResponse;
+      expect(result.statusCode).toBe(400);
+      expect(result.body.message).toMatch(erroMessage);
+    }
   );
 
   it.todo(
