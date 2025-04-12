@@ -1,4 +1,4 @@
-import { Request } from "express";
+import type { Request } from "express";
 import { ZodError } from "zod";
 
 import {
@@ -17,9 +17,7 @@ export class CreateTransactionController {
       const params: CreateTransactionSchema = httpRequest.body;
       await createTransactionSchema.parseAsync(params);
       const transaction = await this.createTransactionUseCase.execute(params);
-      return created({
-        data: transaction
-      });
+      return created(transaction);
     } catch (error) {
       if (error instanceof ZodError) {
         return badRequest(error.errors[0].message);
