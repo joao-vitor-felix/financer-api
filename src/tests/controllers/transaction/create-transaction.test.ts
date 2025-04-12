@@ -27,7 +27,10 @@ describe("CreateTransactionController", () => {
     body: {
       userId: faker.string.uuid(),
       name: faker.commerce.productName(),
-      amount: faker.number.int(),
+      amount: faker.number.int({
+        min: 5,
+        max: 5000
+      }),
       date: faker.date.recent().toISOString(),
       type: "EXPENSE"
     }
@@ -42,12 +45,18 @@ describe("CreateTransactionController", () => {
     expect(result.body).toEqual(httpRequest.body);
   });
 
-  it.todo.skip(
-    "should call CreateTransactionUseCase with correct params",
-    async () => {}
-  );
+  it("should call CreateTransactionUseCase with correct params", async () => {
+    const { sut, createTransactionUseCase } = makeSut();
 
-  it.skip.each([
+    const spy = vi.spyOn(createTransactionUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(httpRequest.body);
+  });
+
+  it.todo.each([
     {
       scenario: "name is not a string",
       httpRequest: {
@@ -133,7 +142,7 @@ describe("CreateTransactionController", () => {
     async ({ httpRequest, erroMessage }) => {}
   );
 
-  it.todo.skip(
+  it.todo(
     "should return 500 when CreateTransactionUseCase throws an unknown error",
     async () => {}
   );
