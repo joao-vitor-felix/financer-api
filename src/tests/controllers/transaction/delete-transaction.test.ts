@@ -65,8 +65,17 @@ describe("DeleteTransactionController", () => {
     expect(result.statusCode).toBe(404);
     expect(result.body.message).toMatch(/not found/i);
   });
-  it.todo(
-    "should return 500 when DeleteTransactionUseCase throws an unknown error",
-    async () => {}
-  );
+
+  it("should return 500 when DeleteTransactionUseCase throws an unknown error", async () => {
+    const { sut, deleteTransactionUseCase } = makeSut();
+
+    vi.spyOn(deleteTransactionUseCase, "execute").mockRejectedValueOnce(
+      new Error("unknown error")
+    );
+
+    const result = (await sut.execute(httpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(500);
+    expect(result.body.message).toMatch(/server error/i);
+  });
 });
