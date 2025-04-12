@@ -150,8 +150,16 @@ describe("CreateTransactionController", () => {
     }
   );
 
-  it.todo(
-    "should return 500 when CreateTransactionUseCase throws an unknown error",
-    async () => {}
-  );
+  it("should return 500 when CreateTransactionUseCase throws an unknown error", async () => {
+    const { sut, createTransactionUseCase } = makeSut();
+
+    vi.spyOn(createTransactionUseCase, "execute").mockRejectedValueOnce(
+      new Error("unknown error")
+    );
+
+    const result = (await sut.execute(httpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(500);
+    expect(result.body.message).toMatch(/server error/i);
+  });
 });
