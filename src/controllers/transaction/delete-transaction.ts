@@ -1,12 +1,13 @@
-import { Request } from "express";
+import type { Request } from "express";
 
 import {
   checkIfIdIsValid,
   internalServerError,
   invalidIdResponse,
-  success,
-  transactionNotFoundResponse
+  notFound,
+  success
 } from "@/controllers/helpers";
+import { TransactionNotFoundError } from "@/errors";
 import { DeleteTransactionUseCase } from "@/use-cases";
 
 export class DeleteTransactionController {
@@ -21,17 +22,15 @@ export class DeleteTransactionController {
         return invalidIdResponse();
       }
 
-      const response =
-        await this.deleteTransactionUseCase.execute(transactionId);
+      await this.deleteTransactionUseCase.execute(transactionId);
 
-      if (response === null) {
-        return transactionNotFoundResponse();
+      return success();
+    } catch (error) {
+      if (error instanceof TransactionNotFoundError) {
+        return notFound("Transaction not found");
       }
 
-      return success({ data: null });
-    } catch (error) {
       console.error(error);
-
       return internalServerError();
     }
   }

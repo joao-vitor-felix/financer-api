@@ -1,7 +1,7 @@
 import { TransactionType } from "@prisma/client";
 import validator from "validator";
 
-import { badRequest, notFound } from "./index";
+import { badRequest } from "./index";
 
 const validTypes: TransactionType[] = ["EARNING", "EXPENSE", "INVESTMENT"];
 
@@ -21,8 +21,4 @@ export const invalidAmountResponse = () => {
 
 export const invalidTypeResponse = () => {
   return badRequest("The type must be EARNING, EXPENSE or INVESTMENT.");
-};
-
-export const transactionNotFoundResponse = () => {
-  return notFound("Transaction not found.");
 };
