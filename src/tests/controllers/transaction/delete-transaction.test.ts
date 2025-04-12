@@ -4,6 +4,7 @@ import type { Request } from "express";
 
 import { DeleteTransactionController } from "@/controllers";
 import { ErrorResponse } from "@/controllers/helpers";
+import { TransactionNotFoundError } from "@/errors";
 import { DeleteTransactionUseCase } from "@/use-cases";
 
 describe("DeleteTransactionController", () => {
@@ -52,7 +53,18 @@ describe("DeleteTransactionController", () => {
     expect(result.body.message).toMatch(/id is not valid/i);
   });
 
-  it.todo("should return 404 when transaction is not found", async () => {});
+  it("should return 404 when transaction is not found", async () => {
+    const { sut, deleteTransactionUseCase } = makeSut();
+
+    vi.spyOn(deleteTransactionUseCase, "execute").mockRejectedValueOnce(
+      new TransactionNotFoundError()
+    );
+
+    const result = (await sut.execute(httpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(404);
+    expect(result.body.message).toMatch(/not found/i);
+  });
   it.todo(
     "should return 500 when DeleteTransactionUseCase throws an unknown error",
     async () => {}
