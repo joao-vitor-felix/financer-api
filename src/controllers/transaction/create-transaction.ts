@@ -15,7 +15,7 @@ export class CreateTransactionController {
   async execute(httpRequest: Request) {
     try {
       const params: CreateTransactionSchema = httpRequest.body;
-      await createTransactionSchema.parseAsync(params);
+      createTransactionSchema.parse(params);
       const transaction = await this.createTransactionUseCase.execute(params);
       return created(transaction);
     } catch (error) {
