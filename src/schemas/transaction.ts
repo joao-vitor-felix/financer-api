@@ -1,4 +1,3 @@
-import validator from "validator";
 import { z } from "zod";
 
 export const createTransactionSchema = z
@@ -37,17 +36,8 @@ export const createTransactionSchema = z
         message: "amount must be a number"
       })
       .min(1, {
-        message: "amount must be greater than 0"
+        message: "amount is lower than 1"
       })
-      .refine(
-        value =>
-          validator.isCurrency(value.toFixed(2), {
-            digits_after_decimal: [2],
-            allow_negatives: false,
-            decimal_separator: "."
-          }),
-        "amount must be a valid currency"
-      )
   })
   .strict({
     message: "Some provided field is not allowed"
