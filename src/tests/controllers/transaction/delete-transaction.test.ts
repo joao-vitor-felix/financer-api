@@ -3,6 +3,7 @@ import { faker } from "@faker-js/faker";
 import type { Request } from "express";
 
 import { DeleteTransactionController } from "@/controllers";
+import { ErrorResponse } from "@/controllers/helpers";
 import { DeleteTransactionUseCase } from "@/use-cases";
 
 describe("DeleteTransactionController", () => {
@@ -37,7 +38,20 @@ describe("DeleteTransactionController", () => {
     expect(result.statusCode).toBe(200);
     expect(result.body).toBeUndefined();
   });
-  it.todo("should return 400 when transactionId is invalid", async () => {});
+
+  it("should return 400 when transactionId is invalid", async () => {
+    const { sut } = makeSut();
+
+    const result = (await sut.execute({
+      params: {
+        transactionId: "invalid"
+      }
+    } as Request<{ transactionId: string }>)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(400);
+    expect(result.body.message).toMatch(/id is not valid/i);
+  });
+
   it.todo("should return 404 when transaction is not found", async () => {});
   it.todo(
     "should return 500 when DeleteTransactionUseCase throws an unknown error",
