@@ -15,6 +15,7 @@ export class DeleteTransactionController {
 
   async execute(httpRequest: Request) {
     try {
+      //TODO: move validation to a zod schema
       const transactionId = httpRequest.params.transactionId;
       const isUUID = checkIfIdIsValid(transactionId);
 
