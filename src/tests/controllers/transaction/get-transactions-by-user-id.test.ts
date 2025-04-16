@@ -4,6 +4,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 import type { Request } from "express";
 
 import { GetTransactionsByUserIdController } from "@/controllers";
+import { ErrorResponse } from "@/controllers/helpers";
 import { GetTransactionsByUserIdUseCase } from "@/use-cases";
 
 describe("GetTransactionsByUserIdController", () => {
@@ -64,12 +65,25 @@ describe("GetTransactionsByUserIdController", () => {
       type: expect.any(String)
     });
   });
-  it.todo("should return 400 if userId is not provided", async () => {});
+
+  it("should return 400 if userId is not provided", async () => {
+    const { sut } = makeSut();
+
+    const result = (await sut.execute({
+      query: {}
+    } as Request)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(400);
+    expect(result.body.message).toMatch(/userid is required/i);
+  });
+
   it.todo("should return 400 if userId is not a valid id", async () => {});
+
   it.todo(
     "should return 404 if GetTransactionsByUserIdUseCase throws UserNotFoundError",
     async () => {}
   );
+
   it.todo(
     "should return 500 if GetTransactionsByUserIdUseCase throws an unknown error",
     async () => {}
