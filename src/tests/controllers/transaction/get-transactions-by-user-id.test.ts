@@ -5,6 +5,7 @@ import type { Request } from "express";
 
 import { GetTransactionsByUserIdController } from "@/controllers";
 import { ErrorResponse } from "@/controllers/helpers";
+import { UserNotFoundError } from "@/errors";
 import { GetTransactionsByUserIdUseCase } from "@/use-cases";
 
 describe("GetTransactionsByUserIdController", () => {
@@ -90,10 +91,18 @@ describe("GetTransactionsByUserIdController", () => {
     expect(result.body.message).toMatch(/id is not valid/i);
   });
 
-  it.todo(
-    "should return 404 if GetTransactionsByUserIdUseCase throws UserNotFoundError",
-    async () => {}
-  );
+  it("should return 404 if GetTransactionsByUserIdUseCase throws UserNotFoundError", async () => {
+    const { sut, getTransactionsByUserIdUseCase } = makeSut();
+
+    vi.spyOn(getTransactionsByUserIdUseCase, "execute").mockRejectedValueOnce(
+      new UserNotFoundError(httpRequest.query.userId)
+    );
+
+    const result = (await sut.execute(httpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(404);
+    expect(result.body.message).toMatch(/not found/i);
+  });
 
   it.todo(
     "should return 500 if GetTransactionsByUserIdUseCase throws an unknown error",
