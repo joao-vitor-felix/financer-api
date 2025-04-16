@@ -104,8 +104,16 @@ describe("GetTransactionsByUserIdController", () => {
     expect(result.body.message).toMatch(/not found/i);
   });
 
-  it.todo(
-    "should return 500 if GetTransactionsByUserIdUseCase throws an unknown error",
-    async () => {}
-  );
+  it("should return 500 if GetTransactionsByUserIdUseCase throws an unknown error", async () => {
+    const { sut, getTransactionsByUserIdUseCase } = makeSut();
+
+    vi.spyOn(getTransactionsByUserIdUseCase, "execute").mockRejectedValueOnce(
+      new Error("unknown error")
+    );
+
+    const result = (await sut.execute(httpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(500);
+    expect(result.body.message).toMatch(/server error/i);
+  });
 });
