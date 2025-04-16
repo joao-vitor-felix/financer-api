@@ -77,7 +77,18 @@ describe("GetTransactionsByUserIdController", () => {
     expect(result.body.message).toMatch(/userid is required/i);
   });
 
-  it.todo("should return 400 if userId is not a valid id", async () => {});
+  it("should return 400 if userId is not a valid id", async () => {
+    const { sut } = makeSut();
+
+    const result = (await sut.execute({
+      query: {
+        userId: "kkkkk"
+      }
+    } as Request<any, any, any, { userId: string }>)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(400);
+    expect(result.body.message).toMatch(/id is not valid/i);
+  });
 
   it.todo(
     "should return 404 if GetTransactionsByUserIdUseCase throws UserNotFoundError",
