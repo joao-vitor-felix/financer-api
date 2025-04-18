@@ -1,14 +1,14 @@
 -- CreateEnum
-CREATE TYPE "TRANSITION_TYPE" AS ENUM ('EARNING', 'EXPENSE', 'INVESTMENT');
+CREATE TYPE "transaction_type" AS ENUM ('EARNING', 'EXPENSE', 'INVESTMENT');
 
 -- CreateTable
 CREATE TABLE "transactions" (
     "id" UUID NOT NULL,
-    "userId" TEXT NOT NULL,
+    "user_id" UUID NOT NULL,
     "name" VARCHAR(50) NOT NULL,
     "date" DATE NOT NULL,
     "amount" DECIMAL(10,2) NOT NULL,
-    "type" "TRANSITION_TYPE" NOT NULL,
+    "type" "transaction_type" NOT NULL,
 
     CONSTRAINT "transactions_pkey" PRIMARY KEY ("id")
 );
@@ -28,5 +28,5 @@ CREATE TABLE "users" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- AddForeignKey
-ALTER TABLE "transactions" ADD CONSTRAINT "transactions_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
