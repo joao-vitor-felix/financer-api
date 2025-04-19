@@ -108,10 +108,18 @@ describe("UpdateTransactionController", () => {
     });
   });
 
-  it.todo(
-    "should call UpdateTransactionUseCase with correct params",
-    async () => {}
-  );
+  it("should call UpdateTransactionUseCase with correct params", async () => {
+    const { sut, updateTransactionUseCase } = makeSut();
+    const spy = vi.spyOn(updateTransactionUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenLastCalledWith(
+      httpRequest.params.transactionId,
+      httpRequest.body
+    );
+  });
 
   it.todo(
     "should return 400 when transactionId is not a valid transactionId",
