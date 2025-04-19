@@ -121,10 +121,23 @@ describe("UpdateTransactionController", () => {
     );
   });
 
-  it.todo(
-    "should return 400 when transactionId is not a valid transactionId",
-    async () => {}
-  );
+  it("should return 400 when transactionId is not a valid transactionId", async () => {
+    const { sut } = makeSut();
+
+    const partialHttpRequest = {
+      params: {
+        transactionId: ""
+      },
+      body: {
+        name: "Renda fixa"
+      }
+    } as HttpRequest;
+
+    const result = (await sut.execute(partialHttpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(400);
+    expect(result.body.message).toMatch(/id is not valid/i);
+  });
 
   it.each([
     {
