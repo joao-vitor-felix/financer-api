@@ -80,15 +80,33 @@ describe("UpdateTransactionController", () => {
         (httpRequest.body.amount && new Decimal(httpRequest.body.amount)) ??
         expect.any(Decimal),
       type: httpRequest.body.type ?? expect.any(String),
-      date: httpRequest.body.date ?? expect.any(Date),
+      date: httpRequest.body.date ?? expect.any(String),
       userId: expect.any(String)
     });
   });
 
-  it.todo(
-    "should return 200 when only some fields are provided",
-    async () => {}
-  );
+  it("should return 200 when only some fields are provided", async () => {
+    const { sut } = makeSut();
+
+    const partialHttpRequest = {
+      params: httpRequest.params,
+      body: {
+        name: "Renda fixa"
+      }
+    } as HttpRequest;
+
+    const result = await sut.execute(partialHttpRequest);
+
+    expect(result.statusCode).toBe(200);
+    expect(result.body).toEqual<Transaction>({
+      id: partialHttpRequest.params.transactionId,
+      name: partialHttpRequest.body.name ?? expect.any(String),
+      amount: expect.any(Decimal),
+      type: expect.any(String),
+      date: expect.any(String),
+      userId: expect.any(String)
+    });
+  });
 
   it.todo(
     "should call UpdateTransactionUseCase with correct params",
