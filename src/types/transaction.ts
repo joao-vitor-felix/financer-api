@@ -10,7 +10,7 @@ export interface IUpdateTransactionRepository {
   updateTransaction(
     transactionId: string,
     updateTransactionParams: UpdateTransactionSchema
-  ): Promise<Transaction | null>;
+  ): Promise<Transaction | undefined>;
 }
 
 export interface IGetTransactionsByUserIdRepository {

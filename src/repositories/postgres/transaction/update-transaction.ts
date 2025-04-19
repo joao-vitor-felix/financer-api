@@ -1,3 +1,6 @@
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+
+import { TransactionNotFoundError } from "@/errors";
 import { prisma } from "@/lib/client";
 import { UpdateTransactionSchema } from "@/schemas";
 import { IUpdateTransactionRepository } from "@/types";
@@ -19,8 +22,14 @@ export class PostgresUpdateTransactionRepository
 
       return transaction;
     } catch (error) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === "P2025"
+      ) {
+        throw new TransactionNotFoundError();
+      }
       console.error(error);
-      return null;
+      throw new Error("Error updating transaction");
     }
   }
 }
