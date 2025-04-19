@@ -230,8 +230,15 @@ describe("UpdateTransactionController", () => {
     }
   );
 
-  it.todo(
-    "should return 500 when UpdateTransactionUseCase throws",
-    async () => {}
-  );
+  it("should return 500 when UpdateTransactionUseCase throws", async () => {
+    const { sut, updateTransactionUseCase } = makeSut();
+    vi.spyOn(updateTransactionUseCase, "execute").mockRejectedValueOnce(
+      new Error("unknown error")
+    );
+
+    const result = (await sut.execute(httpRequest)) as ErrorResponse;
+
+    expect(result.statusCode).toBe(500);
+    expect(result.body.message).toMatch(/server error/i);
+  });
 });
