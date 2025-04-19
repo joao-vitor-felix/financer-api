@@ -1,4 +1,4 @@
-import { Request } from "express";
+import type { Request } from "express";
 import { ZodError } from "zod";
 
 import {
@@ -6,10 +6,9 @@ import {
   checkIfIdIsValid,
   internalServerError,
   invalidIdResponse,
-  success,
-  transactionNotFoundResponse
+  success
 } from "@/controllers/helpers";
-import { UpdateTransactionSchema, updateTransactionSchema } from "@/schemas";
+import { updateTransactionSchema } from "@/schemas";
 import { UpdateTransactionUseCase } from "@/use-cases";
 
 export class UpdateTransactionController {
@@ -18,36 +17,25 @@ export class UpdateTransactionController {
   async execute(httpRequest: Request) {
     try {
       const transactionId = httpRequest.params.transactionId;
-
       const isUUID = checkIfIdIsValid(transactionId);
 
       if (!isUUID) {
         return invalidIdResponse();
       }
 
-      const params: UpdateTransactionSchema = httpRequest.body;
-
-      await updateTransactionSchema.parseAsync(params);
-
-      const updatedTransaction = await this.updateTransactionUseCase.execute(
+      const params = updateTransactionSchema.parse(httpRequest.body);
+      const transaction = await this.updateTransactionUseCase.execute(
         httpRequest.params.transactionId,
         params
       );
 
-      if (!updatedTransaction) {
-        return transactionNotFoundResponse();
-      }
-
-      return success({
-        data: updatedTransaction
-      });
+      return success(transaction);
     } catch (error) {
       if (error instanceof ZodError) {
         return badRequest(error.errors[0].message);
       }
 
       console.error(error);
-
       return internalServerError();
     }
   }
