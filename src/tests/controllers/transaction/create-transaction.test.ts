@@ -65,7 +65,7 @@ describe("CreateTransactionController", () => {
           name: 1
         }
       },
-      erroMessage: /must be a string/i
+      errorMessage: /must be a string/i
     },
     {
       scenario: "name is not provided",
@@ -75,7 +75,7 @@ describe("CreateTransactionController", () => {
           name: ""
         }
       },
-      erroMessage: /must contain at least 1 character/i
+      errorMessage: /must contain at least 1 character/i
     },
     {
       scenario: "date is not a string",
@@ -85,7 +85,7 @@ describe("CreateTransactionController", () => {
           date: true
         }
       },
-      erroMessage: /must be a string/i
+      errorMessage: /must be a string/i
     },
     {
       scenario: "date is not valid",
@@ -95,7 +95,7 @@ describe("CreateTransactionController", () => {
           date: "invalid-date"
         }
       },
-      erroMessage: /must be a valid date/i
+      errorMessage: /must be a valid date/i
     },
     {
       scenario: "type is not valid",
@@ -105,7 +105,7 @@ describe("CreateTransactionController", () => {
           type: "invalid"
         }
       },
-      erroMessage: /must be expense, earning, or investment/i
+      errorMessage: /must be expense, earning, or investment/i
     },
     {
       scenario: "amount is not a number",
@@ -115,7 +115,7 @@ describe("CreateTransactionController", () => {
           amount: "1"
         }
       },
-      erroMessage: /must be a number/i
+      errorMessage: /must be a number/i
     },
     {
       scenario: "amount is lower than 1",
@@ -125,7 +125,7 @@ describe("CreateTransactionController", () => {
           amount: 0
         }
       },
-      erroMessage: /lower than 1/i
+      errorMessage: /lower than 1/i
     },
     {
       scenario: "when an unallowed field is provided",
@@ -135,18 +135,18 @@ describe("CreateTransactionController", () => {
           role: "ADMIN"
         }
       },
-      erroMessage: /field is not allowed/i
+      errorMessage: /field is not allowed/i
     }
   ])(
     "should return 400 when $scenario",
-    async ({ httpRequest, erroMessage }) => {
+    async ({ httpRequest, errorMessage }) => {
       const { sut } = makeSut();
 
       const result = (await sut.execute(
         httpRequest as Request
       )) as ErrorResponse;
       expect(result.statusCode).toBe(400);
-      expect(result.body.message).toMatch(erroMessage);
+      expect(result.body.message).toMatch(errorMessage);
     }
   );
 
