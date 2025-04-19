@@ -15,7 +15,7 @@ describe("GetTransactionsByUserIdController", () => {
         {
           id: faker.string.uuid(),
           userId,
-          date: faker.date.recent(),
+          date: faker.date.recent().toISOString() as unknown as Date,
           amount: new Decimal(faker.number.int()),
           name: faker.commerce.productName(),
           type: "EXPENSE"
@@ -23,7 +23,7 @@ describe("GetTransactionsByUserIdController", () => {
         {
           id: faker.string.uuid(),
           userId,
-          date: faker.date.recent(),
+          date: faker.date.recent().toISOString() as unknown as Date,
           amount: new Decimal(faker.number.int()),
           name: faker.commerce.productName(),
           type: "EARNING"
@@ -60,7 +60,7 @@ describe("GetTransactionsByUserIdController", () => {
     expect(result.body).toContainEqual<Transaction>({
       id: expect.any(String),
       userId: expect.any(String),
-      date: expect.any(Date),
+      date: expect.any(String),
       amount: expect.any(Decimal),
       name: expect.any(String),
       type: expect.any(String)
