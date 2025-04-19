@@ -67,7 +67,23 @@ describe("UpdateTransactionController", () => {
     }
   } as HttpRequest;
 
-  it.todo("should return 200 alongside updated transaction", async () => {});
+  it("should return 200 alongside updated transaction", async () => {
+    const { sut } = makeSut();
+
+    const result = await sut.execute(httpRequest);
+
+    expect(result.statusCode).toBe(200);
+    expect(result.body).toEqual<Transaction>({
+      id: httpRequest.params.transactionId,
+      name: httpRequest.body.name ?? expect.any(String),
+      amount:
+        (httpRequest.body.amount && new Decimal(httpRequest.body.amount)) ??
+        expect.any(Decimal),
+      type: httpRequest.body.type ?? expect.any(String),
+      date: httpRequest.body.date ?? expect.any(Date),
+      userId: expect.any(String)
+    });
+  });
 
   it.todo(
     "should return 200 when only some fields are provided",
