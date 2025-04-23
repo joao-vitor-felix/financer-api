@@ -53,6 +53,16 @@ describe("GetUserBalanceController", () => {
     });
   });
 
+  it("should call use case with correct params", async () => {
+    const { sut, getUserBalanceUseCaseStub } = makeSut();
+    const spy = vi.spyOn(getUserBalanceUseCaseStub, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(httpRequest.params.userId);
+  });
+
   it("should return 400 if userId is not a valid id", async () => {
     const { sut } = makeSut();
 

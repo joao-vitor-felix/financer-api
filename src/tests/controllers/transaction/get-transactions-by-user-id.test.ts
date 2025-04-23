@@ -67,6 +67,16 @@ describe("GetTransactionsByUserIdController", () => {
     });
   });
 
+  it("should call use case with correct params", async () => {
+    const { sut, getTransactionsByUserIdUseCase } = makeSut();
+    const spy = vi.spyOn(getTransactionsByUserIdUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(httpRequest.query.userId);
+  });
+
   it("should return 400 if userId is not provided", async () => {
     const { sut } = makeSut();
 

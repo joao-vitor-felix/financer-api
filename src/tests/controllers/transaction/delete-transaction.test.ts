@@ -40,6 +40,16 @@ describe("DeleteTransactionController", () => {
     expect(result.body).toBeUndefined();
   });
 
+  it("should call use case with correct params", async () => {
+    const { sut, deleteTransactionUseCase } = makeSut();
+    const spy = vi.spyOn(deleteTransactionUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(httpRequest.params.transactionId);
+  });
+
   it("should return 400 when transactionId is invalid", async () => {
     const { sut } = makeSut();
 

@@ -40,6 +40,16 @@ describe("DeleteUserController", () => {
     expect(result.statusCode).toBe(200);
   });
 
+  it("should call use case with correct params", async () => {
+    const { sut, deleteUserUseCaseStub } = makeSut();
+    const spy = vi.spyOn(deleteUserUseCaseStub, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(httpRequest.params.userId);
+  });
+
   it("should return 400 when userId is not valid", async () => {
     const { sut } = makeSut();
 

@@ -17,7 +17,7 @@ describe("GetUserByIdController", () => {
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
         email: faker.internet.email(),
-        password: faker.internet.password({
+        hashedPassword: faker.internet.password({
           length: 6
         })
       };
@@ -25,11 +25,12 @@ describe("GetUserByIdController", () => {
   }
 
   function makeSut() {
-    const getUserById = new GetUserByIdUseCaseStub() as GetUserByIdUseCase;
-    const sut = new GetUserByIdController(getUserById);
+    const getUserByIdUseCase =
+      new GetUserByIdUseCaseStub() as GetUserByIdUseCase;
+    const sut = new GetUserByIdController(getUserByIdUseCase);
 
     return {
-      getUserById,
+      getUserByIdUseCase,
       sut
     };
   }
@@ -51,8 +52,18 @@ describe("GetUserByIdController", () => {
       firstName: expect.any(String),
       lastName: expect.any(String),
       email: expect.any(String),
-      password: expect.any(String)
+      hashedPassword: expect.any(String)
     });
+  });
+
+  it("should call use case with correct params", async () => {
+    const { sut, getUserByIdUseCase } = makeSut();
+    const spy = vi.spyOn(getUserByIdUseCase, "execute");
+
+    await sut.execute(httpRequest);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(httpRequest.params.userId);
   });
 
   it("should return 400 when userId is not valid", async () => {
@@ -69,8 +80,8 @@ describe("GetUserByIdController", () => {
   });
 
   it("should return 404 when GetUserByIdUseCase throws UserNotFoundError", async () => {
-    const { sut, getUserById } = makeSut();
-    vi.spyOn(getUserById, "execute").mockRejectedValueOnce(
+    const { sut, getUserByIdUseCase } = makeSut();
+    vi.spyOn(getUserByIdUseCase, "execute").mockRejectedValueOnce(
       new UserNotFoundError(httpRequest.params.userId)
     );
 
@@ -81,8 +92,8 @@ describe("GetUserByIdController", () => {
   });
 
   it("should return 500 when GetUserByIdUseCase throws an unknown error", async () => {
-    const { sut, getUserById } = makeSut();
-    vi.spyOn(getUserById, "execute").mockRejectedValueOnce(
+    const { sut, getUserByIdUseCase } = makeSut();
+    vi.spyOn(getUserByIdUseCase, "execute").mockRejectedValueOnce(
       new Error("Internal server error")
     );
 
