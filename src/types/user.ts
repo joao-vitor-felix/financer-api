@@ -4,7 +4,9 @@ import { Decimal } from "@prisma/client/runtime/library";
 import { CreateUserSchema, UpdateUserSchema } from "@/schemas";
 
 export interface ICreateUserRepository {
-  execute(params: CreateUserSchema): Promise<User>;
+  execute(
+    params: Omit<CreateUserSchema, "password"> & { hashedPassword: string }
+  ): Promise<User>;
 }
 
 export interface IUpdateUserRepository {

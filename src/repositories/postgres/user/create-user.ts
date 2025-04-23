@@ -3,7 +3,7 @@ import { CreateUserSchema } from "@/schemas";
 import { ICreateUserRepository } from "@/types";
 
 interface CreateUserRepositoryParams extends CreateUserSchema {
-  password: string;
+  hashedPassword: string;
 }
 
 export class PostgresCreateUserRepository implements ICreateUserRepository {

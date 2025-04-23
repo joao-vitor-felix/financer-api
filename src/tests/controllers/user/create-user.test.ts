@@ -5,22 +5,27 @@ import { Request } from "express";
 import { CreateUserController } from "@/controllers";
 import { ErrorResponse } from "@/controllers/helpers";
 import { EmailAlreadyInUseError } from "@/errors/user";
+import { CreateUserSchema } from "@/schemas";
 import { CreateUserUseCase } from "@/use-cases";
 
 describe("CreateUserController", () => {
   class CreateUserUseCaseStub {
     constructor() {}
 
-    async execute(user: User): Promise<User> {
-      return user;
+    async execute(user: CreateUserSchema): Promise<User> {
+      return {
+        id: faker.string.uuid(),
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        hashedPassword: faker.string.nanoid()
+      };
     }
   }
 
   function makeSut() {
-    const createUserUseCase = new CreateUserUseCaseStub();
-    const sut = new CreateUserController(
-      createUserUseCase as CreateUserUseCase
-    );
+    const createUserUseCase = new CreateUserUseCaseStub() as CreateUserUseCase;
+    const sut = new CreateUserController(createUserUseCase);
 
     return {
       createUserUseCase,
