@@ -42,7 +42,7 @@ describe("CreateUserController", () => {
         length: 6
       })
     }
-  } as Request;
+  } as Request<any, any, CreateUserSchema>;
 
   it("should create user with valid data", async () => {
     const { sut } = makeSut();
@@ -50,7 +50,13 @@ describe("CreateUserController", () => {
     const result = await sut.execute(httpRequest);
 
     expect(result.statusCode).toBe(201);
-    expect(result.body).toEqual(httpRequest.body);
+    expect(result.body).toEqual({
+      id: expect.any(String),
+      firstName: httpRequest.body.firstName,
+      lastName: httpRequest.body.lastName,
+      email: httpRequest.body.email,
+      hashedPassword: expect.any(String)
+    });
   });
 
   it("should call CreateUserUseCase with correct values", async () => {
