@@ -1,5 +1,4 @@
-import bcrypt from "bcryptjs";
-
+import { PasswordHasherAdapter } from "@/adapters";
 import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors/user";
 import { UpdateUserSchema } from "@/schemas";
 import { IGetUserByEmailRepository, IUpdateUserRepository } from "@/types";
@@ -10,7 +9,8 @@ export class UpdateUserUseCase {
   constructor(
     private getUserByIdUseCase: GetUserByIdUseCase,
     private getUserByEmailRepository: IGetUserByEmailRepository,
-    private updateUserRepository: IUpdateUserRepository
+    private updateUserRepository: IUpdateUserRepository,
+    private passwordHasherAdapter: PasswordHasherAdapter
   ) {}
 
   async execute(userId: string, params: UpdateUserSchema) {
@@ -31,8 +31,7 @@ export class UpdateUserUseCase {
     }
 
     if (params.password) {
-      const hashedPassword = await bcrypt.hash(params.password, 10);
-      params.password = hashedPassword;
+      params.password = await this.passwordHasherAdapter.hash(params.password);
     }
 
     const user = await this.updateUserRepository.updateUser(userId, params);

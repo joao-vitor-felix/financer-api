@@ -1,5 +1,4 @@
-import bcrypt from "bcryptjs";
-
+import { PasswordHasherAdapter } from "@/adapters";
 import { EmailAlreadyInUseError } from "@/errors/user";
 import { CreateUserSchema } from "@/schemas";
 import { ICreateUserRepository, IGetUserByEmailRepository } from "@/types";
@@ -7,7 +6,8 @@ import { ICreateUserRepository, IGetUserByEmailRepository } from "@/types";
 export class CreateUserUseCase {
   constructor(
     private getUserByEmailRepository: IGetUserByEmailRepository,
-    private createUserRepository: ICreateUserRepository
+    private createUserRepository: ICreateUserRepository,
+    private passwordHasherAdapter: PasswordHasherAdapter
   ) {}
 
   async execute(params: CreateUserSchema) {
@@ -19,17 +19,17 @@ export class CreateUserUseCase {
       throw new EmailAlreadyInUseError(params.email);
     }
 
-    const { firstName, lastName, email } = params;
+    const { firstName, lastName, email, password } = params;
+    const hashedPassword = await this.passwordHasherAdapter.hash(password);
 
-    const hashedPassword = await bcrypt.hash(params.password, 10);
-    const user = {
+    const userParams = {
       firstName,
       lastName,
       email,
       hashedPassword
     };
 
-    const createdUser = await this.createUserRepository.execute(user);
-    return createdUser;
+    const user = await this.createUserRepository.execute(userParams);
+    return user;
   }
 }
