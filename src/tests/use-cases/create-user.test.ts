@@ -120,7 +120,14 @@ describe("CreateUserUseCase", () => {
     );
   });
 
-  it.todo("should throw if GetUserByEmailRepository throws", async () => {});
+  it("should throw if GetUserByEmailRepository throws", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+    vi.spyOn(getUserByEmailRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(user)).rejects.toThrow();
+  });
 
   it.todo("should throw if PasswordHasherAdapter throws", async () => {});
 
