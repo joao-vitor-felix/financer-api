@@ -64,7 +64,14 @@ describe("DeleteUserUseCase", () => {
     expect(sut.execute("any_id")).rejects.toBeInstanceOf(UserNotFoundError);
   });
 
-  it.todo("should throw if GetUserByIdUseCase throws", async () => {});
+  it("should throw if GetUserByIdRepository throws", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    expect(sut.execute("any_id")).rejects.toThrow();
+  });
 
   it.todo("should throw if DeleteUserRepository throws", async () => {});
 });
