@@ -81,5 +81,12 @@ describe("GetUserBalanceUseCase", () => {
     await expect(sut.execute("any_id")).rejects.toThrow();
   });
 
-  it.todo("should throw if GetUserBalanceRepository throws", async () => {});
+  it("should throw if GetUserBalanceRepository throws", async () => {
+    const { sut, getUserBalanceRepository } = makeSut();
+    vi.spyOn(getUserBalanceRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute("any_id")).rejects.toThrow();
+  });
 });
