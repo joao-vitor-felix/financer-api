@@ -136,5 +136,12 @@ describe("CreateUserUseCase", () => {
     await expect(sut.execute(user)).rejects.toThrow();
   });
 
-  it.todo("should throw if CreateUserRepository throws", async () => {});
+  it("should throw if CreateUserRepository throws", async () => {
+    const { sut, createUserRepository } = makeSut();
+    vi.spyOn(createUserRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(user)).rejects.toThrow();
+  });
 });
