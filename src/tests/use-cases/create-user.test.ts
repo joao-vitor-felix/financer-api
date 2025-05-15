@@ -89,10 +89,20 @@ describe("CreateUserUseCase", () => {
     expect(spy).toHaveBeenCalledWith(user.password);
   });
 
-  it.todo(
-    "should call CreateUserRepository with correct param",
-    async () => {}
-  );
+  it("should call CreateUserRepository with correct params", async () => {
+    const { sut, createUserRepository } = makeSut();
+    const spy = vi.spyOn(createUserRepository, "execute");
+
+    await sut.execute(user);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      hashedPassword: "hashed_password"
+    });
+  });
 
   it.todo(
     "should throw EmailAlreadyInUseError if email is already in use",
