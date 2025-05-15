@@ -42,10 +42,15 @@ describe("GetUserBalanceUseCase", () => {
     expect(balanceReturned).toEqual(balance);
   });
 
-  it.todo(
-    "should call GetUserByIdRepository with correct param",
-    async () => {}
-  );
+  it("should call GetUserByIdRepository with correct param", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    const spy = vi.spyOn(getUserByIdRepository, "execute");
+
+    await sut.execute("any_id");
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith("any_id");
+  });
 
   it.todo(
     "should call GetUserBalanceRepository with correct param",
