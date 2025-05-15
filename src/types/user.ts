@@ -14,7 +14,7 @@ export interface IUpdateUserRepository {
 }
 
 export interface IDeleteUserRepository {
-  deleteUser(id: string): Promise<void>;
+  execute(id: string): Promise<void>;
 }
 
 export type Balance = {
