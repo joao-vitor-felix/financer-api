@@ -52,10 +52,15 @@ describe("GetUserBalanceUseCase", () => {
     expect(spy).toHaveBeenCalledWith("any_id");
   });
 
-  it.todo(
-    "should call GetUserBalanceRepository with correct param",
-    async () => {}
-  );
+  it("should call GetUserBalanceRepository with correct param", async () => {
+    const { sut, getUserBalanceRepository } = makeSut();
+    const spy = vi.spyOn(getUserBalanceRepository, "execute");
+
+    await sut.execute("any_id");
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith("any_id");
+  });
 
   it.todo(
     "should throw  UserNotFoundError if GetUserByIdRepository returns null",
