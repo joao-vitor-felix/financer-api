@@ -69,10 +69,15 @@ describe("CreateUserUseCase", () => {
     });
   });
 
-  it.todo(
-    "should call GetUserByEmailRepository with correct param",
-    async () => {}
-  );
+  it("should call GetUserByEmailRepository with correct param", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+    const spy = vi.spyOn(getUserByEmailRepository, "execute");
+
+    await sut.execute(user);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(user.email);
+  });
 
   it.todo(
     "should call PasswordHasherAdapter with correct param",
