@@ -2,6 +2,7 @@
 import { faker } from "@faker-js/faker";
 
 import { PasswordHasherAdapter } from "@/adapters";
+import { EmailAlreadyInUseError } from "@/errors";
 import { CreateUserUseCase } from "@/use-cases";
 
 describe("CreateUserUseCase", () => {
@@ -12,7 +13,7 @@ describe("CreateUserUseCase", () => {
   }
 
   class GetUserByEmailRepositoryStub {
-    async execute(_email: string) {
+    async execute(_email: string): Promise<any> {
       return null;
     }
   }
@@ -104,10 +105,20 @@ describe("CreateUserUseCase", () => {
     });
   });
 
-  it.todo(
-    "should throw EmailAlreadyInUseError if email is already in use",
-    async () => {}
-  );
+  it("should throw EmailAlreadyInUseError if GetUserByEmailRepository return a user", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+    vi.spyOn(getUserByEmailRepository, "execute").mockResolvedValueOnce({
+      id: faker.string.uuid(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      email: user.email,
+      hashedPassword: faker.string.nanoid()
+    });
+
+    await expect(sut.execute(user)).rejects.toBeInstanceOf(
+      EmailAlreadyInUseError
+    );
+  });
 
   it.todo("should throw if GetUserByEmailRepository throws", async () => {});
 
