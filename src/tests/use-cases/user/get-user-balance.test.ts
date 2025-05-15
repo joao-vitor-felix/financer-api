@@ -2,6 +2,7 @@
 import { faker } from "@faker-js/faker";
 import { Decimal } from "@prisma/client/runtime/library";
 
+import { UserNotFoundError } from "@/errors";
 import { GetUserByIdRepositoryStub } from "@/tests/stubs/GetUserByIdRepositoryStub";
 import { GetUserBalanceUseCase } from "@/use-cases";
 
@@ -62,10 +63,14 @@ describe("GetUserBalanceUseCase", () => {
     expect(spy).toHaveBeenCalledWith("any_id");
   });
 
-  it.todo(
-    "should throw  UserNotFoundError if GetUserByIdRepository returns null",
-    async () => {}
-  );
+  it("should throw UserNotFoundError if GetUserByIdRepository returns null", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockResolvedValueOnce(null);
+
+    await expect(sut.execute("any_id")).rejects.toBeInstanceOf(
+      UserNotFoundError
+    );
+  });
 
   it.todo("should throw if GetUserByIdRepository throws", async () => {});
 
