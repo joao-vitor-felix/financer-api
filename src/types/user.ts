@@ -25,7 +25,7 @@ export type Balance = {
 };
 
 export interface IGetUserBalanceRepository {
-  getUserBalance(userId: string): Promise<Balance>;
+  execute(userId: string): Promise<Balance>;
 }
 
 export interface IGetUserByEmailRepository {
