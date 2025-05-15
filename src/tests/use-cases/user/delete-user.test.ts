@@ -1,22 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { faker } from "@faker-js/faker";
 
 import { UserNotFoundError } from "@/errors";
+import { GetUserByIdRepositoryStub } from "@/tests/stubs/GetUserByIdRepositoryStub";
 import { DeleteUserUseCase } from "@/use-cases";
 
 describe("DeleteUserUseCase", () => {
-  class GetUserByIdRepositoryStub {
-    async execute(_id: string): Promise<any> {
-      return {
-        id: "any_id",
-        firstName: faker.person.firstName(),
-        lastName: faker.person.lastName(),
-        email: faker.internet.email(),
-        hashedPassword: faker.string.nanoid()
-      };
-    }
-  }
-
   class DeleteUserRepositoryStub {
     async execute(_id: string): Promise<void> {
       return;
