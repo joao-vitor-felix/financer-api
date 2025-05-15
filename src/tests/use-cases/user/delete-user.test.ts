@@ -43,7 +43,16 @@ describe("DeleteUserUseCase", () => {
 
     expect(result).toBeUndefined();
   });
-  it.todo("should GetUserByIdUseCase with correct param", async () => {});
+
+  it("should GetUserByIdUseCase with correct param", async () => {
+    const { sut, getUserByIdUseCase } = makeSut();
+    const spy = vi.spyOn(getUserByIdUseCase, "execute");
+
+    await sut.execute("any_id");
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith("any_id");
+  });
   it.todo("should throw if GetUserByIdUseCase throws", async () => {});
   it.todo("should throw if DeleteUserRepository throws", async () => {});
 });
