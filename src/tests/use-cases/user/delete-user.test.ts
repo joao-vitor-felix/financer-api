@@ -18,7 +18,7 @@ describe("DeleteUserUseCase", () => {
   }
 
   class DeleteUserRepositoryStub {
-    async deleteUser(_id: string): Promise<void> {
+    async execute(_id: string): Promise<void> {
       return;
     }
   }
@@ -73,5 +73,12 @@ describe("DeleteUserUseCase", () => {
     expect(sut.execute("any_id")).rejects.toThrow();
   });
 
-  it.todo("should throw if DeleteUserRepository throws", async () => {});
+  it("should throw if DeleteUserRepository throws", async () => {
+    const { sut, deleteUserRepository } = makeSut();
+    vi.spyOn(deleteUserRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    expect(sut.execute("any_id")).rejects.toThrow();
+  });
 });
