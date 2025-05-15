@@ -1,20 +1,22 @@
 import { PasswordHasherAdapter } from "@/adapters";
 import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors/user";
 import { UpdateUserSchema } from "@/schemas";
-import { IGetUserByEmailRepository, IUpdateUserRepository } from "@/types";
-
-import { GetUserByIdUseCase } from "./get-user-by-id";
+import {
+  IGetUserByEmailRepository,
+  IGetUserByIdRepository,
+  IUpdateUserRepository
+} from "@/types";
 
 export class UpdateUserUseCase {
   constructor(
-    private getUserByIdUseCase: GetUserByIdUseCase,
+    private getUserByIdRepository: IGetUserByIdRepository,
     private getUserByEmailRepository: IGetUserByEmailRepository,
     private updateUserRepository: IUpdateUserRepository,
     private passwordHasherAdapter: PasswordHasherAdapter
   ) {}
 
   async execute(userId: string, params: UpdateUserSchema) {
-    const userFound = await this.getUserByIdUseCase.execute(userId);
+    const userFound = await this.getUserByIdRepository.execute(userId);
 
     if (!userFound) {
       throw new UserNotFoundError(userId);
