@@ -16,7 +16,6 @@ export class DeleteUserUseCase {
       throw new UserNotFoundError(id);
     }
 
-    const userDeleted = await this.deleteUserRepository.deleteUser(id);
-    return userDeleted;
+    await this.deleteUserRepository.deleteUser(id);
   }
 }
