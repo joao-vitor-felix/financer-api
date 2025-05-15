@@ -1,16 +1,14 @@
 import { UserNotFoundError } from "@/errors/user";
-import { IDeleteUserRepository } from "@/types";
-
-import { GetUserByIdUseCase } from "./get-user-by-id";
+import { IDeleteUserRepository, IGetUserByIdRepository } from "@/types";
 
 export class DeleteUserUseCase {
   constructor(
     private deleteUserRepository: IDeleteUserRepository,
-    private getUserByIdUseCase: GetUserByIdUseCase
+    private getUserByIdRepository: IGetUserByIdRepository
   ) {}
 
   async execute(id: string) {
-    const user = await this.getUserByIdUseCase.execute(id);
+    const user = await this.getUserByIdRepository.execute(id);
 
     if (!user) {
       throw new UserNotFoundError(id);

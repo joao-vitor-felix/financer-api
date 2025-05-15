@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { faker } from "@faker-js/faker";
 
-import { DeleteUserUseCase, GetUserByIdUseCase } from "@/use-cases";
+import { DeleteUserUseCase } from "@/use-cases";
 
 describe("DeleteUserUseCase", () => {
-  class GetUserByIdUseCaseStub {
+  class GetUserByIdRepositoryStub {
     async execute(_id: string): Promise<any> {
       return {
         id: "any_id",
@@ -23,15 +23,17 @@ describe("DeleteUserUseCase", () => {
   }
 
   function makeSut() {
-    const getUserByIdUseCase =
-      new GetUserByIdUseCaseStub() as GetUserByIdUseCase;
+    const getUserByIdRepository = new GetUserByIdRepositoryStub();
     const deleteUserRepository = new DeleteUserRepositoryStub();
 
-    const sut = new DeleteUserUseCase(deleteUserRepository, getUserByIdUseCase);
+    const sut = new DeleteUserUseCase(
+      deleteUserRepository,
+      getUserByIdRepository
+    );
 
     return {
       sut,
-      getUserByIdUseCase,
+      getUserByIdRepository,
       deleteUserRepository
     };
   }
@@ -44,15 +46,22 @@ describe("DeleteUserUseCase", () => {
     expect(result).toBeUndefined();
   });
 
-  it("should GetUserByIdUseCase with correct param", async () => {
-    const { sut, getUserByIdUseCase } = makeSut();
-    const spy = vi.spyOn(getUserByIdUseCase, "execute");
+  it("should GetUserByIdRepository with correct param", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    const spy = vi.spyOn(getUserByIdRepository, "execute");
 
     await sut.execute("any_id");
 
     expect(spy).toHaveBeenCalledOnce();
     expect(spy).toHaveBeenCalledWith("any_id");
   });
+
+  it.todo(
+    "should throw UserNotFoundError if GetUserByIdRepository returns null",
+    async () => {}
+  );
+
   it.todo("should throw if GetUserByIdUseCase throws", async () => {});
+
   it.todo("should throw if DeleteUserRepository throws", async () => {});
 });

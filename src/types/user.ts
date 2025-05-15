@@ -33,5 +33,5 @@ export interface IGetUserByEmailRepository {
 }
 
 export interface IGetUserByIdRepository {
-  getUserById(id: string): Promise<User | null>;
+  execute(id: string): Promise<User | null>;
 }

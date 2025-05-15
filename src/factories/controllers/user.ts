@@ -61,10 +61,9 @@ export const makeUpdateUserController = () => {
 export const makeDeleteUserController = () => {
   const deleteUserRepository = new PostgresDeleteUserRepository();
   const getUserByIdRepository = new PostgresGetUserByIdRepository();
-  const getUserByIdUseCase = new GetUserByIdUseCase(getUserByIdRepository);
   const deleteUserUseCase = new DeleteUserUseCase(
     deleteUserRepository,
-    getUserByIdUseCase
+    getUserByIdRepository
   );
   const deleteUserController = new DeleteUserController(deleteUserUseCase);
   return deleteUserController;
