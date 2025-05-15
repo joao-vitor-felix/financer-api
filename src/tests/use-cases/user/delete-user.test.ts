@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { faker } from "@faker-js/faker";
 
+import { UserNotFoundError } from "@/errors";
 import { DeleteUserUseCase } from "@/use-cases";
 
 describe("DeleteUserUseCase", () => {
@@ -56,10 +57,12 @@ describe("DeleteUserUseCase", () => {
     expect(spy).toHaveBeenCalledWith("any_id");
   });
 
-  it.todo(
-    "should throw UserNotFoundError if GetUserByIdRepository returns null",
-    async () => {}
-  );
+  it("should throw UserNotFoundError if GetUserByIdRepository returns null", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockResolvedValueOnce(null);
+
+    expect(sut.execute("any_id")).rejects.toBeInstanceOf(UserNotFoundError);
+  });
 
   it.todo("should throw if GetUserByIdUseCase throws", async () => {});
 
