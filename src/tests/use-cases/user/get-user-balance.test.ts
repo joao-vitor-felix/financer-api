@@ -72,7 +72,14 @@ describe("GetUserBalanceUseCase", () => {
     );
   });
 
-  it.todo("should throw if GetUserByIdRepository throws", async () => {});
+  it("should throw if GetUserByIdRepository throws", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute("any_id")).rejects.toThrow();
+  });
 
   it.todo("should throw if GetUserBalanceRepository throws", async () => {});
 });
