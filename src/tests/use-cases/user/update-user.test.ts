@@ -145,10 +145,15 @@ describe("UpdateUserUseCase", () => {
     expect(spy).not.toHaveBeenCalledOnce();
   });
 
-  it.todo(
-    "should call UpdateUserRepository with correct params",
-    async () => {}
-  );
+  it("should call UpdateUserRepository with correct params", async () => {
+    const { sut, updateUserRepository } = makeSut();
+    const spy = vi.spyOn(updateUserRepository, "execute");
+
+    await sut.execute(user.id, userParams);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(user.id, userParams);
+  });
 
   it.todo("should throw if GetUserByIdRepository throws", async () => {});
 
