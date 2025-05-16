@@ -98,10 +98,16 @@ describe("UpdateUserUseCase", () => {
     expect(spy).toHaveBeenCalledWith(userParams.email);
   });
 
-  it.todo(
-    "should not call GetUserByEmailRepository when email is not provided",
-    async () => {}
-  );
+  it("should not call GetUserByEmailRepository when email is not provided", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+    const spy = vi.spyOn(getUserByEmailRepository, "execute");
+
+    await sut.execute(user.id, {
+      password: "123456641"
+    });
+
+    expect(spy).not.toHaveBeenCalledOnce();
+  });
 
   it.todo(
     "should throw EmailAlreadyInUseError if email is already in use",
