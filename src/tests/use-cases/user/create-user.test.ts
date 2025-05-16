@@ -3,18 +3,13 @@ import { faker } from "@faker-js/faker";
 
 import { PasswordHasherAdapter } from "@/adapters";
 import { EmailAlreadyInUseError } from "@/errors";
+import { GetUserByEmailRepositoryStub } from "@/tests/stubs/GetUserByEmailRepositoryStub";
 import { CreateUserUseCase } from "@/use-cases";
 
 describe("CreateUserUseCase", () => {
   class PasswordHasherAdapterStub {
     async hash(_password: string) {
       return "hashed_password";
-    }
-  }
-
-  class GetUserByEmailRepositoryStub {
-    async execute(_email: string): Promise<any> {
-      return null;
     }
   }
 
