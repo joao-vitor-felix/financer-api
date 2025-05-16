@@ -66,10 +66,15 @@ describe("UpdateUserUseCase", () => {
     });
   });
 
-  it.todo(
-    "should call GetUserByIdRepository with correct param",
-    async () => {}
-  );
+  it("should call GetUserByIdRepository with correct param", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    const spy = vi.spyOn(getUserByIdRepository, "execute");
+
+    await sut.execute(user.id, userParams);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(user.id);
+  });
 
   it.todo(
     "should throw UserNotFoundError if GetUserByIdRepository returns null",
