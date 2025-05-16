@@ -134,10 +134,16 @@ describe("UpdateUserUseCase", () => {
     expect(spy).toHaveBeenCalledWith(userParams.password);
   });
 
-  it.todo(
-    "should not call PasswordHasherAdapter when password is not provided",
-    async () => {}
-  );
+  it("should not call PasswordHasherAdapter when password is not provided", async () => {
+    const { sut, passwordHasherAdapter } = makeSut();
+    const spy = vi.spyOn(passwordHasherAdapter, "hash");
+
+    await sut.execute(user.id, {
+      email: userParams.email
+    });
+
+    expect(spy).not.toHaveBeenCalledOnce();
+  });
 
   it.todo(
     "should call UpdateUserRepository with correct params",
