@@ -1,18 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { faker } from "@faker-js/faker";
 
 import { PasswordHasherAdapter } from "@/adapters";
 import { EmailAlreadyInUseError } from "@/errors";
 import { GetUserByEmailRepositoryStub } from "@/tests/stubs/GetUserByEmailRepositoryStub";
+import { PasswordHasherAdapterStub } from "@/tests/stubs/PasswordHasherAdapterStub";
 import { CreateUserUseCase } from "@/use-cases";
 
 describe("CreateUserUseCase", () => {
-  class PasswordHasherAdapterStub {
-    async hash(_password: string) {
-      return "hashed_password";
-    }
-  }
-
   class CreateUserRepositoryStub {
     async execute(user: any) {
       return {
