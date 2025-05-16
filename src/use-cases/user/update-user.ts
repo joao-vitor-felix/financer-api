@@ -36,7 +36,7 @@ export class UpdateUserUseCase {
       params.password = await this.passwordHasherAdapter.hash(params.password);
     }
 
-    const user = await this.updateUserRepository.updateUser(userId, params);
+    const user = await this.updateUserRepository.execute(userId, params);
     return user;
   }
 }

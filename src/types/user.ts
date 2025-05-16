@@ -10,7 +10,7 @@ export interface ICreateUserRepository {
 }
 
 export interface IUpdateUserRepository {
-  updateUser(userId: string, updateUserParams: UpdateUserSchema): Promise<User>;
+  execute(userId: string, updateUserParams: UpdateUserSchema): Promise<User>;
 }
 
 export interface IDeleteUserRepository {
