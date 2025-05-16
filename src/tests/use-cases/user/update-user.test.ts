@@ -155,7 +155,14 @@ describe("UpdateUserUseCase", () => {
     expect(spy).toHaveBeenCalledWith(user.id, userParams);
   });
 
-  it.todo("should throw if GetUserByIdRepository throws", async () => {});
+  it("should throw if GetUserByIdRepository throws", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(user.id, userParams)).rejects.toThrow();
+  });
 
   it.todo("should throw if GetUserByEmailRepository throws", async () => {});
 
