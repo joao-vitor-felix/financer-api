@@ -49,7 +49,9 @@ describe("DeleteUserUseCase", () => {
     const { sut, getUserByIdRepository } = makeSut();
     vi.spyOn(getUserByIdRepository, "execute").mockResolvedValueOnce(null);
 
-    expect(sut.execute("any_id")).rejects.toBeInstanceOf(UserNotFoundError);
+    await expect(sut.execute("any_id")).rejects.toBeInstanceOf(
+      UserNotFoundError
+    );
   });
 
   it("should throw if GetUserByIdRepository throws", async () => {
@@ -58,7 +60,7 @@ describe("DeleteUserUseCase", () => {
       new Error()
     );
 
-    expect(sut.execute("any_id")).rejects.toThrow();
+    await expect(sut.execute("any_id")).rejects.toThrow();
   });
 
   it("should throw if DeleteUserRepository throws", async () => {
@@ -67,6 +69,6 @@ describe("DeleteUserUseCase", () => {
       new Error()
     );
 
-    expect(sut.execute("any_id")).rejects.toThrow();
+    await expect(sut.execute("any_id")).rejects.toThrow();
   });
 });
