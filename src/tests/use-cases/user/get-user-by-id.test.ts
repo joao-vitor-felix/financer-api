@@ -1,3 +1,4 @@
+import { UserNotFoundError } from "@/errors";
 import { user } from "@/tests/fixtures/user";
 import { GetUserByIdRepositoryStub } from "@/tests/stubs/GetUserByIdRepositoryStub";
 import { GetUserByIdUseCase } from "@/use-cases";
@@ -39,10 +40,12 @@ describe("GetUserByIdUseCase", () => {
     expect(spy).toHaveBeenCalledWith(id);
   });
 
-  it.todo(
-    "should throw UserNotFoundError if GetUserByIdRepository returns null",
-    async () => {}
-  );
+  it("should throw UserNotFoundError if GetUserByIdRepository returns null", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockResolvedValueOnce(null);
+
+    await expect(sut.execute(id)).rejects.toBeInstanceOf(UserNotFoundError);
+  });
 
   it.todo("should throw if GetUserByIdRepository throws", async () => {});
 });
