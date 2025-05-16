@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import { User } from "@prisma/client";
 
 import { PasswordHasherAdapter } from "@/adapters";
+import { UserNotFoundError } from "@/errors";
 import { UpdateUserSchema } from "@/schemas";
 import { user } from "@/tests/fixtures/user";
 import { GetUserByEmailRepositoryStub } from "@/tests/stubs/GetUserByEmailRepositoryStub";
@@ -76,10 +77,14 @@ describe("UpdateUserUseCase", () => {
     expect(spy).toHaveBeenCalledWith(user.id);
   });
 
-  it.todo(
-    "should throw UserNotFoundError if GetUserByIdRepository returns null",
-    async () => {}
-  );
+  it("should throw UserNotFoundError if GetUserByIdRepository returns null", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockResolvedValueOnce(null);
+
+    await expect(sut.execute(user.id, userParams)).rejects.toBeInstanceOf(
+      UserNotFoundError
+    );
+  });
 
   it.todo(
     "should call GetUserByEmailRepository with correct param when email is provided",
