@@ -180,5 +180,12 @@ describe("UpdateUserUseCase", () => {
     await expect(sut.execute(user.id, userParams)).rejects.toThrow();
   });
 
-  it.todo("should throw if UpdateUserRepository throws", async () => {});
+  it("should throw if UpdateUserRepository throws", async () => {
+    const { sut, updateUserRepository } = makeSut();
+    vi.spyOn(updateUserRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(user.id, userParams)).rejects.toThrow();
+  });
 });
