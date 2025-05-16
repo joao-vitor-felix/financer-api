@@ -26,9 +26,9 @@ describe("UpdateUserUseCase", () => {
   }
 
   function makeSut() {
-    const updateUserRepository = new UpdateUserRepositoryStub();
     const getUserByIdRepository = new GetUserByIdRepositoryStub();
     const getUserByEmailRepository = new GetUserByEmailRepositoryStub();
+    const updateUserRepository = new UpdateUserRepositoryStub();
     const passwordHasherAdapter =
       new PasswordHasherAdapterStub() as PasswordHasherAdapter;
 
@@ -50,7 +50,9 @@ describe("UpdateUserUseCase", () => {
 
   const userParams = {
     email: faker.internet.email(),
-    password: faker.internet.password()
+    password: faker.internet.password({
+      length: 6
+    })
   };
 
   it("should update user successfully", async () => {
@@ -86,10 +88,15 @@ describe("UpdateUserUseCase", () => {
     );
   });
 
-  it.todo(
-    "should call GetUserByEmailRepository with correct param when email is provided",
-    async () => {}
-  );
+  it("should call GetUserByEmailRepository with correct param when email is provided", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+    const spy = vi.spyOn(getUserByEmailRepository, "execute");
+
+    await sut.execute(user.id, userParams);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(userParams.email);
+  });
 
   it.todo(
     "should not call GetUserByEmailRepository when email is not provided",
