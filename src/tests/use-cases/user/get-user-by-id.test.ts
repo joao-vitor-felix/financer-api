@@ -13,13 +13,15 @@ describe("GetUserByIdUseCase", () => {
     };
   }
 
+  const id = "any_id";
+
   it("should retrieve user successfully", async () => {
     const { sut } = makeSut();
 
-    const result = await sut.execute("any_id");
+    const result = await sut.execute(id);
 
     expect(result).toEqual({
-      id: "any_id",
+      id,
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
@@ -27,10 +29,15 @@ describe("GetUserByIdUseCase", () => {
     });
   });
 
-  it.todo(
-    "should call GetUserByIdRepository with correct param",
-    async () => {}
-  );
+  it("should call GetUserByIdRepository with correct param", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    const spy = vi.spyOn(getUserByIdRepository, "execute");
+
+    await sut.execute(id);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(id);
+  });
 
   it.todo(
     "should throw UserNotFoundError if GetUserByIdRepository returns null",
