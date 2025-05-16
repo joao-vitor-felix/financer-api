@@ -124,10 +124,15 @@ describe("UpdateUserUseCase", () => {
     );
   });
 
-  it.todo(
-    "should call PasswordHasherAdapter with correct param when password is provided",
-    async () => {}
-  );
+  it("should call PasswordHasherAdapter with correct param when password is provided", async () => {
+    const { sut, passwordHasherAdapter } = makeSut();
+    const spy = vi.spyOn(passwordHasherAdapter, "hash");
+
+    await sut.execute(user.id, userParams);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(userParams.password);
+  });
 
   it.todo(
     "should not call PasswordHasherAdapter when password is not provided",
