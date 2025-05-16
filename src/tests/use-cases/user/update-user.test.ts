@@ -173,7 +173,12 @@ describe("UpdateUserUseCase", () => {
     await expect(sut.execute(user.id, userParams)).rejects.toThrow();
   });
 
-  it.todo("should throw if PasswordHasherAdapter throws", async () => {});
+  it("should throw if PasswordHasherAdapter throws", async () => {
+    const { sut, passwordHasherAdapter } = makeSut();
+    vi.spyOn(passwordHasherAdapter, "hash").mockRejectedValueOnce(new Error());
+
+    await expect(sut.execute(user.id, userParams)).rejects.toThrow();
+  });
 
   it.todo("should throw if UpdateUserRepository throws", async () => {});
 });
