@@ -1,14 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { faker } from "@faker-js/faker";
+import { user } from "../fixtures/user";
 
 export class GetUserByIdRepositoryStub {
-  async execute(_id: string): Promise<any> {
+  async execute(id: string): Promise<any> {
     return {
-      id: "any_id",
-      firstName: faker.person.firstName(),
-      lastName: faker.person.lastName(),
-      email: faker.internet.email(),
-      hashedPassword: faker.string.nanoid()
+      ...user,
+      id
     };
   }
 }
