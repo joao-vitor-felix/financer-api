@@ -2,7 +2,7 @@ import { faker } from "@faker-js/faker";
 import { User } from "@prisma/client";
 
 import { PasswordHasherAdapter } from "@/adapters";
-import { UserNotFoundError } from "@/errors";
+import { EmailAlreadyInUseError, UserNotFoundError } from "@/errors";
 import { UpdateUserSchema } from "@/schemas";
 import { user } from "@/tests/fixtures/user";
 import { GetUserByEmailRepositoryStub } from "@/tests/stubs/GetUserByEmailRepositoryStub";
@@ -109,10 +109,20 @@ describe("UpdateUserUseCase", () => {
     expect(spy).not.toHaveBeenCalledOnce();
   });
 
-  it.todo(
-    "should throw EmailAlreadyInUseError if email is already in use",
-    async () => {}
-  );
+  it("should throw EmailAlreadyInUseError if email is already in use", async () => {
+    const { sut, getUserByEmailRepository } = makeSut();
+    vi.spyOn(getUserByEmailRepository, "execute").mockResolvedValueOnce({
+      id: faker.string.uuid(),
+      firstName: faker.person.firstName(),
+      lastName: faker.person.lastName(),
+      email: userParams.email,
+      hashedPassword: faker.string.nanoid()
+    });
+
+    await expect(sut.execute(user.id, userParams)).rejects.toBeInstanceOf(
+      EmailAlreadyInUseError
+    );
+  });
 
   it.todo(
     "should call PasswordHasherAdapter with correct param when password is provided",
