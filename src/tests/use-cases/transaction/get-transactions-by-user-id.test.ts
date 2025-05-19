@@ -77,7 +77,14 @@ describe("GetTransactionsByUserIdUseCase", () => {
     expect(spy).toHaveBeenCalledWith(userId);
   });
 
-  it.todo("should throw if GetUserByIdRepository throws", async () => {});
+  it("should throw if GetUserByIdRepository throws", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(userId)).rejects.toThrow();
+  });
 
   it.todo(
     "should throw if GetTransactionsByUserIdRepository throws",
