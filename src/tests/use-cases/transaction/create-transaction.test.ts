@@ -48,10 +48,15 @@ describe("CreateTransactionUseCase", () => {
     });
   });
 
-  it.todo(
-    "should call GetUserByIdRepository with correct param",
-    async () => {}
-  );
+  it("should call GetUserByIdRepository with correct param", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    const spy = vi.spyOn(getUserByIdRepository, "execute");
+
+    await sut.execute(transaction);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(transaction.userId);
+  });
 
   it.todo(
     "should throw UserNotFoundError GetUserByIdRepository with correct param",
