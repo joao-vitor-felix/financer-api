@@ -6,7 +6,7 @@ import { IGetUserBalanceRepository } from "@/types";
 export class PostgresGetUserBalanceRepository
   implements IGetUserBalanceRepository
 {
-  async getUserBalance(userId: string) {
+  async execute(userId: string) {
     const {
       _sum: { amount: totalExpenses }
     } = await prisma.transaction.aggregate({

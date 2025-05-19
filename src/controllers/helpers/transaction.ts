@@ -1,9 +1,9 @@
-import { TransactionType } from "@prisma/client";
+import { TRANSITION_TYPE } from "@prisma/client";
 import validator from "validator";
 
 import { badRequest } from "./index";
 
-const validTypes: TransactionType[] = ["EARNING", "EXPENSE", "INVESTMENT"];
+const validTypes: TRANSITION_TYPE[] = ["EARNING", "EXPENSE", "INVESTMENT"];
 
 export const isAmountValidCheck = (amount: number) =>
   validator.isCurrency(amount.toString(), {
@@ -12,7 +12,7 @@ export const isAmountValidCheck = (amount: number) =>
     decimal_separator: "."
   });
 
-export const isTypeValidCheck = (type: TransactionType) =>
+export const isTypeValidCheck = (type: TRANSITION_TYPE) =>
   validTypes.includes(type);
 
 export const invalidAmountResponse = () => {
