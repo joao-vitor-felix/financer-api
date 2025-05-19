@@ -67,10 +67,15 @@ describe("GetTransactionsByUserIdUseCase", () => {
     await expect(sut.execute(userId)).rejects.toBeInstanceOf(UserNotFoundError);
   });
 
-  it.todo(
-    "should call GetTransactionsByUserIdRepository with correct param",
-    async () => {}
-  );
+  it("should call GetTransactionsByUserIdRepository with correct param", async () => {
+    const { sut, getTransactionsByUserIdRepository } = makeSut();
+    const spy = vi.spyOn(getTransactionsByUserIdRepository, "execute");
+
+    await sut.execute(userId);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(userId);
+  });
 
   it.todo("should throw if GetUserByIdRepository throws", async () => {});
 
