@@ -28,10 +28,15 @@ describe("DeleteTransactionUseCase", () => {
     expect(result).toBeUndefined();
   });
 
-  it.todo(
-    "should call DeleteTransactionRepository with correct param",
-    async () => {}
-  );
+  it("should call DeleteTransactionRepository with correct param", async () => {
+    const { sut, deleteTransactionRepository } = makeSut();
+    const spy = vi.spyOn(deleteTransactionRepository, "execute");
+
+    await sut.execute(transactionId);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(transactionId);
+  });
 
   it.todo(
     "should throw TransactionNotFoundError if DeleteTransactionRepository returns false",
