@@ -4,18 +4,14 @@ import { IDeleteTransactionRepository } from "@/types";
 export class DeleteTransactionUseCase {
   constructor(
     private deleteTransactionRepository: IDeleteTransactionRepository
-  ) {
-    this.deleteTransactionRepository = deleteTransactionRepository;
-  }
+  ) {}
 
   async execute(transactionId: string) {
     const transaction =
-      await this.deleteTransactionRepository.deleteTransaction(transactionId);
+      await this.deleteTransactionRepository.execute(transactionId);
 
-    if (transaction === null) {
+    if (!transaction) {
       throw new TransactionNotFoundError();
     }
-
-    return transaction;
   }
 }

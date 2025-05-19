@@ -18,5 +18,5 @@ export interface IGetTransactionsByUserIdRepository {
 }
 
 export interface IDeleteTransactionRepository {
-  deleteTransaction(id: string): Promise<null | undefined>;
+  execute(id: string): Promise<boolean>;
 }

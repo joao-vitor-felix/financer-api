@@ -4,16 +4,17 @@ import { IDeleteTransactionRepository } from "@/types";
 export class PostgresDeleteTransactionRepository
   implements IDeleteTransactionRepository
 {
-  async deleteTransaction(transactionId: string) {
+  async execute(transactionId: string) {
     try {
       await prisma.transaction.delete({
         where: {
           id: transactionId
         }
       });
+      return true;
     } catch (error) {
       console.error(error);
-      return null;
+      return false;
     }
   }
 }
