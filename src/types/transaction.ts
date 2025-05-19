@@ -3,7 +3,7 @@ import { Transaction } from "@prisma/client";
 import { CreateTransactionSchema, UpdateTransactionSchema } from "@/schemas";
 
 export interface ICreateTransactionRepository {
-  createTransaction(transaction: CreateTransactionSchema): Promise<Transaction>;
+  execute(transaction: CreateTransactionSchema): Promise<Transaction>;
 }
 
 export interface IUpdateTransactionRepository {
