@@ -11,7 +11,7 @@ export class CreateTransactionUseCase {
   async execute(params: CreateTransactionSchema) {
     const { userId, name, date, type, amount } = params;
 
-    const user = this.getUserByIdRepository.execute(userId);
+    const user = await this.getUserByIdRepository.execute(userId);
 
     if (!user) {
       throw new UserNotFoundError(userId);
