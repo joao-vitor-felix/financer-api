@@ -68,10 +68,15 @@ describe("CreateTransactionUseCase", () => {
     );
   });
 
-  it.todo(
-    "should call CreateTransactionRepository with correct params",
-    async () => {}
-  );
+  it("should call CreateTransactionRepository with correct params", async () => {
+    const { sut, createTransactionRepository } = makeSut();
+    const spy = vi.spyOn(createTransactionRepository, "execute");
+
+    await sut.execute(transaction);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(transaction);
+  });
 
   it.todo("should throw if CreateTransactionRepository throws", async () => {});
 
