@@ -78,7 +78,14 @@ describe("CreateTransactionUseCase", () => {
     expect(spy).toHaveBeenCalledWith(transaction);
   });
 
-  it.todo("should throw if CreateTransactionRepository throws", async () => {});
+  it("should throw if GetUserByIdRepository throws", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
 
-  it.todo("should throw if GetUserByIdRepository throws", async () => {});
+    await expect(sut.execute(transaction)).rejects.toThrow();
+  });
+
+  it("should throw if CreateTransactionRepository throws", async () => {});
 });
