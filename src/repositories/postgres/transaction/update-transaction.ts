@@ -8,10 +8,7 @@ import { IUpdateTransactionRepository } from "@/types";
 export class PostgresUpdateTransactionRepository
   implements IUpdateTransactionRepository
 {
-  async updateTransaction(
-    transactionId: string,
-    params: UpdateTransactionSchema
-  ) {
+  async execute(transactionId: string, params: UpdateTransactionSchema) {
     try {
       const transaction = await prisma.transaction.update({
         where: {

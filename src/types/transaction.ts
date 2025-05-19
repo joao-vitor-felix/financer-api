@@ -7,7 +7,7 @@ export interface ICreateTransactionRepository {
 }
 
 export interface IUpdateTransactionRepository {
-  updateTransaction(
+  execute(
     transactionId: string,
     updateTransactionParams: UpdateTransactionSchema
   ): Promise<Transaction | undefined>;
