@@ -17,6 +17,12 @@ describe("UpdateTransactionUseCase", () => {
     amount: new Decimal(faker.number.int())
   };
 
+  const params: UpdateTransactionSchema = {
+    name: "Tiger",
+    type: "EARNING",
+    amount: 1000
+  };
+
   class UpdateTransactionRepositoryStub {
     async execute(transactionId: string, params: UpdateTransactionSchema) {
       return {
@@ -43,12 +49,6 @@ describe("UpdateTransactionUseCase", () => {
   it("should update a transaction successfully", async () => {
     const { sut } = makeSut();
 
-    const params: UpdateTransactionSchema = {
-      name: "Tiger",
-      type: "EARNING",
-      amount: 1000
-    };
-
     const result = await sut.execute(transactionId, params);
 
     expect(result).toEqual({
@@ -61,10 +61,15 @@ describe("UpdateTransactionUseCase", () => {
     });
   });
 
-  it.todo(
-    "should call UpdateTransactionRepository with correct params",
-    async () => {}
-  );
+  it("should call UpdateTransactionRepository with correct params", async () => {
+    const { sut, updateTransactionRepository } = makeSut();
+    const spy = vi.spyOn(updateTransactionRepository, "execute");
+
+    await sut.execute(transactionId, params);
+
+    expect(spy).toHaveBeenCalledOnce();
+    expect(spy).toHaveBeenCalledWith(transactionId, params);
+  });
 
   it.todo("should throw if UpdateTransactionRepository throws", async () => {});
 });
