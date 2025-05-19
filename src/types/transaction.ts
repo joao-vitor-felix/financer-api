@@ -14,7 +14,7 @@ export interface IUpdateTransactionRepository {
 }
 
 export interface IGetTransactionsByUserIdRepository {
-  getTransactions(userId: string): Promise<Transaction[]>;
+  execute(userId: string): Promise<Transaction[]>;
 }
 
 export interface IDeleteTransactionRepository {

@@ -4,7 +4,7 @@ import { IGetTransactionsByUserIdRepository } from "@/types/transaction.js";
 export class PostgresGetTransactionsByUserIdRepository
   implements IGetTransactionsByUserIdRepository
 {
-  async getTransactions(userId: string) {
+  async execute(userId: string) {
     const transactions = await prisma.transaction.findMany({
       where: {
         userId
