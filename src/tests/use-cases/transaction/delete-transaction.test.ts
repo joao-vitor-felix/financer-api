@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { TransactionNotFoundError } from "@/errors";
 import { DeleteTransactionUseCase } from "@/use-cases";
 
 describe("DeleteTransactionUseCase", () => {
@@ -38,10 +39,16 @@ describe("DeleteTransactionUseCase", () => {
     expect(spy).toHaveBeenCalledWith(transactionId);
   });
 
-  it.todo(
-    "should throw TransactionNotFoundError if DeleteTransactionRepository returns false",
-    async () => {}
-  );
+  it("should throw TransactionNotFoundError if DeleteTransactionRepository returns false", async () => {
+    const { sut, deleteTransactionRepository } = makeSut();
+    vi.spyOn(deleteTransactionRepository, "execute").mockResolvedValueOnce(
+      false
+    );
+
+    await expect(sut.execute(transactionId)).rejects.toBeInstanceOf(
+      TransactionNotFoundError
+    );
+  });
 
   it.todo("should throw if DeleteTransactionRepository throws", async () => {});
 });
