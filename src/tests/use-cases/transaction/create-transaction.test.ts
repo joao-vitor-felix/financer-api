@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 
+import { UserNotFoundError } from "@/errors";
 import { CreateTransactionSchema } from "@/schemas";
 import { GetUserByIdRepositoryStub } from "@/tests/stubs/GetUserByIdRepositoryStub";
 import { CreateTransactionUseCase } from "@/use-cases";
@@ -58,10 +59,14 @@ describe("CreateTransactionUseCase", () => {
     expect(spy).toHaveBeenCalledWith(transaction.userId);
   });
 
-  it.todo(
-    "should throw UserNotFoundError GetUserByIdRepository with correct param",
-    async () => {}
-  );
+  it("should throw UserNotFoundError if GetUserByIdRepository returns no user", async () => {
+    const { sut, getUserByIdRepository } = makeSut();
+    vi.spyOn(getUserByIdRepository, "execute").mockResolvedValueOnce(null);
+
+    await expect(sut.execute(transaction)).rejects.toBeInstanceOf(
+      UserNotFoundError
+    );
+  });
 
   it.todo(
     "should call CreateTransactionRepository with correct params",
