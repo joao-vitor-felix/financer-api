@@ -50,5 +50,12 @@ describe("DeleteTransactionUseCase", () => {
     );
   });
 
-  it.todo("should throw if DeleteTransactionRepository throws", async () => {});
+  it("should throw if DeleteTransactionRepository throws", async () => {
+    const { sut, deleteTransactionRepository } = makeSut();
+    vi.spyOn(deleteTransactionRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(transactionId)).rejects.toThrow();
+  });
 });
