@@ -71,5 +71,12 @@ describe("UpdateTransactionUseCase", () => {
     expect(spy).toHaveBeenCalledWith(transactionId, params);
   });
 
-  it.todo("should throw if UpdateTransactionRepository throws", async () => {});
+  it("should throw if UpdateTransactionRepository throws", async () => {
+    const { sut, updateTransactionRepository } = makeSut();
+    vi.spyOn(updateTransactionRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(transactionId, params)).rejects.toThrow();
+  });
 });
