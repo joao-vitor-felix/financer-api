@@ -87,5 +87,12 @@ describe("CreateTransactionUseCase", () => {
     await expect(sut.execute(transaction)).rejects.toThrow();
   });
 
-  it("should throw if CreateTransactionRepository throws", async () => {});
+  it("should throw if CreateTransactionRepository throws", async () => {
+    const { sut, createTransactionRepository } = makeSut();
+    vi.spyOn(createTransactionRepository, "execute").mockRejectedValueOnce(
+      new Error()
+    );
+
+    await expect(sut.execute(transaction)).rejects.toThrow();
+  });
 });
