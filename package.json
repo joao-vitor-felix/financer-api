@@ -10,6 +10,7 @@
     "lint:fix": "prettier --write src && eslint src --fix",
     "test": "vitest run",
     "test:watch": "vitest watch",
+    "test:integration": "vitest --config vitest.integration.config.ts",
     "test:ci": "vitest run --coverage",
     "test:ui": "vitest --ui --coverage.enabled=true",
     "postinstall": "husky && prisma generate",

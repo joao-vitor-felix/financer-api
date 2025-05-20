@@ -1,5 +1,6 @@
 import path from "node:path";
 
+import { config } from "dotenv";
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({
@@ -7,7 +8,12 @@ export default defineConfig({
     globals: true,
     silent: true,
     passWithNoTests: true,
-    include: ["**/*.test.ts"]
+    env: {
+      ...config({ path: ".env.test" }).parsed
+    },
+    include: ["**/*.integration.test.ts", "**/*.spec.ts"],
+    globalSetup: ["src/tests/global-setup.ts"],
+    setupFiles: ["src/tests/setup.ts"]
   },
   resolve: {
     alias: {
