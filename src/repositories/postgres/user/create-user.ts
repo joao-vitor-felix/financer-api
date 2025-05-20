@@ -2,9 +2,9 @@ import { prisma } from "@/lib/client";
 import { CreateUserSchema } from "@/schemas";
 import { ICreateUserRepository } from "@/types";
 
-interface CreateUserRepositoryParams extends CreateUserSchema {
+type CreateUserRepositoryParams = Omit<CreateUserSchema, "password"> & {
   hashedPassword: string;
-}
+};
 
 export class PostgresCreateUserRepository implements ICreateUserRepository {
   async execute(params: CreateUserRepositoryParams) {
