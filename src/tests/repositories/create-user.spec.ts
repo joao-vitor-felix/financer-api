@@ -25,4 +25,10 @@ describe("CreateUserRepository", () => {
       data: user
     });
   });
+
+  it("should throw if Prisma throws", async () => {
+    vi.spyOn(prisma.user, "create").mockRejectedValueOnce(new Error());
+
+    await expect(sut.execute(user)).rejects.toThrow();
+  });
 });
