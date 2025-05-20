@@ -12,5 +12,16 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: password
       POSTGRES_DB: financer
+
+  postgres-test:
+    image: postgres
+    container_name: postgres-test
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: financer
+    ports:
+      - "5433:5432"
+
 volumes:
   postgres-data:
