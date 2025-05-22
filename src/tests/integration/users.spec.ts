@@ -25,5 +25,17 @@ describe("Users integration tests", () => {
         email: user.email
       });
     });
+
+    it("should return 400 when invalid field is provided", async () => {
+      const response = await request(app)
+        .post("/users")
+        .send({
+          ...user,
+          email: "invalid-email"
+        });
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toMatch(/valid/i);
+    });
   });
 });
