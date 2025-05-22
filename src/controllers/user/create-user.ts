@@ -3,6 +3,7 @@ import { ZodError } from "zod";
 
 import {
   badRequest,
+  conflict,
   created,
   internalServerError
 } from "@/controllers/helpers";
@@ -33,7 +34,7 @@ export class CreateUserController {
       }
 
       if (error instanceof EmailAlreadyInUseError) {
-        return badRequest(error.message);
+        return conflict(error.message);
       }
 
       console.error(error);
