@@ -6,7 +6,7 @@ import { CreateUserSchema, UpdateUserSchema } from "@/schemas";
 export interface ICreateUserRepository {
   execute(
     params: Omit<CreateUserSchema, "password"> & { hashedPassword: string }
-  ): Promise<User>;
+  ): Promise<Omit<CreateUserSchema, "password">>;
 }
 
 export interface IUpdateUserRepository {

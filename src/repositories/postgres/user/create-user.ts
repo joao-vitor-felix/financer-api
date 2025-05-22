@@ -12,6 +12,11 @@ export class PostgresCreateUserRepository implements ICreateUserRepository {
       data: params
     });
 
-    return user;
+    return {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email
+    };
   }
 }
