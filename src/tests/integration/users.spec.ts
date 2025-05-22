@@ -2,6 +2,7 @@ import { faker } from "@faker-js/faker";
 import request from "supertest";
 
 import { app } from "@/app";
+import { prisma } from "@/lib/client";
 
 const user = {
   firstName: faker.person.firstName(),
@@ -36,6 +37,14 @@ describe("Users integration tests", () => {
 
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toMatch(/valid/i);
+    });
+
+    it("should return 500 when a server error happens", async () => {
+      vi.spyOn(prisma.user, "create").mockRejectedValueOnce(new Error());
+      const response = await request(app).post("/users").send(user);
+
+      expect(response.statusCode).toBe(500);
+      expect(response.body.message).toMatch(/server error/i);
     });
   });
 });
