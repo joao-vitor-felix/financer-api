@@ -1,12 +1,16 @@
-import { User } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 import { CreateUserSchema, UpdateUserSchema } from "@/schemas";
 
+export type UserDTO = Omit<CreateUserSchema, "password"> & {
+  hashedPassword: string;
+};
+export type User = Omit<CreateUserSchema, "password"> & {
+  id: string;
+};
+
 export interface ICreateUserRepository {
-  execute(
-    params: Omit<CreateUserSchema, "password"> & { hashedPassword: string }
-  ): Promise<Omit<CreateUserSchema, "password">>;
+  execute(params: UserDTO): Promise<User>;
 }
 
 export interface IUpdateUserRepository {

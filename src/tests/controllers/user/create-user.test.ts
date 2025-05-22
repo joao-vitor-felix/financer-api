@@ -1,11 +1,12 @@
 import { faker } from "@faker-js/faker";
-import { User } from "@prisma/client";
+// import { User } from "@prisma/client";
 import { Request } from "express";
 
 import { CreateUserController } from "@/controllers";
 import { ErrorResponse } from "@/controllers/helpers";
 import { EmailAlreadyInUseError } from "@/errors/user";
 import { CreateUserSchema } from "@/schemas";
+import { User } from "@/types";
 import { CreateUserUseCase } from "@/use-cases";
 
 describe("CreateUserController", () => {
@@ -17,8 +18,7 @@ describe("CreateUserController", () => {
         id: faker.string.uuid(),
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email,
-        hashedPassword: faker.string.nanoid()
+        email: user.email
       };
     }
   }
@@ -54,8 +54,7 @@ describe("CreateUserController", () => {
       id: expect.any(String),
       firstName: httpRequest.body.firstName,
       lastName: httpRequest.body.lastName,
-      email: httpRequest.body.email,
-      hashedPassword: expect.any(String)
+      email: httpRequest.body.email
     });
   });
 
@@ -168,7 +167,7 @@ describe("CreateUserController", () => {
     expect(result.body.message).toMatch(errorMessage);
   });
 
-  it("should return 400 when CreateUserUseCase throws EmailAlreadyInUseError", async () => {
+  it("should return 409 when CreateUserUseCase throws EmailAlreadyInUseError", async () => {
     const { sut, createUserUseCase } = makeSut();
     vi.spyOn(createUserUseCase, "execute").mockRejectedValueOnce(
       new EmailAlreadyInUseError(httpRequest.body.email)
@@ -176,7 +175,7 @@ describe("CreateUserController", () => {
 
     const result = (await sut.execute(httpRequest)) as ErrorResponse;
 
-    expect(result.statusCode).toBe(400);
+    expect(result.statusCode).toBe(409);
     expect(result.body.message).toMatch(/already in use/i);
   });
 
