@@ -55,4 +55,18 @@ describe("Users integration tests", () => {
       expect(response.body.message).toMatch(/server error/i);
     });
   });
+
+  describe("DELETE /users/:id", () => {
+    it("should return 200 when a user is deleted successfully", async () => {
+      const { body } = await request(app).post("/users").send(user);
+      const response = await request(app).delete(`/users/${body.id}`);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual({});
+    });
+
+    it.todo("should return 404 when the user is not found", async () => {});
+
+    it.todo("should return 500 when a server error happens", async () => {});
+  });
 });
