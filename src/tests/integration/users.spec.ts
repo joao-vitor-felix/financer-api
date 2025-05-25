@@ -161,7 +161,14 @@ describe("Users integration tests", () => {
       expect(response.body.message).toMatch(/valid/i);
     });
 
-    it.todo("should return 404 when user is not found", async () => {});
+    it("should return 404 when user is not found", async () => {
+      const response = await request(app).patch(`/users/${randomUUID()}`).send({
+        email: "john@doe.com"
+      });
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body.message).toMatch(/not found/i);
+    });
 
     it.todo("should return 500 when a server error happens", async () => {});
   });
