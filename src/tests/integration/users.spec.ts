@@ -111,10 +111,21 @@ describe("Users integration tests", () => {
       expect(response.body.message).toMatch(/valid/i);
     });
 
-    it.todo(
-      "should return 409 when the email is already taken",
-      async () => {}
-    );
+    it("should return 409 when the email is already taken", async () => {
+      await request(app)
+        .post("/users")
+        .send({
+          ...user,
+          email: "john@doe.com"
+        });
+      const { body } = await request(app).post("/users").send(user);
+      const response = await request(app).patch(`/users/${body.id}`).send({
+        email: "john@doe.com"
+      });
+
+      expect(response.statusCode).toBe(409);
+      expect(response.body.message).toMatch(/already in use/i);
+    });
 
     it.todo("should return 404 when user is not found", async () => {});
 
