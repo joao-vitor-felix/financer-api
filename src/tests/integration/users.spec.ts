@@ -96,10 +96,20 @@ describe("Users integration tests", () => {
       expect(response.body).toHaveProperty("email", updateParams.email);
     });
 
-    it.todo(
-      "should return 400 when a invalid field is provided",
-      async () => {}
-    );
+    it("should return 400 when a invalid field is provided", async () => {
+      const updateParams = {
+        firstName: "John Doe",
+        email: "invalid-email"
+      };
+
+      const { body } = await request(app).post("/users").send(user);
+      const response = await request(app)
+        .patch(`/users/${body.id}`)
+        .send(updateParams);
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toMatch(/valid/i);
+    });
 
     it.todo(
       "should return 409 when the email is already taken",
