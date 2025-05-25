@@ -153,7 +153,13 @@ describe("Users integration tests", () => {
       });
     });
 
-    it.todo("should return 400 when user id is invalid", async () => {});
+    it("should return 400 when user id is invalid", async () => {
+      await request(app).post("/users").send(user);
+      const response = await request(app).get(`/users/invalid-id`);
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toMatch(/valid/i);
+    });
 
     it.todo("should return 404 when user is not found", async () => {});
 
