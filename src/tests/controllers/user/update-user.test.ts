@@ -217,7 +217,7 @@ describe("UpdateUserController", () => {
     }
   );
 
-  it("should return 400 if UpdateUserUseCase throws an EmailAlreadyInUseError", async () => {
+  it("should return 409 if UpdateUserUseCase throws an EmailAlreadyInUseError", async () => {
     const { sut, updateUserUseCase } = makeSut();
     vi.spyOn(updateUserUseCase, "execute").mockRejectedValueOnce(
       new EmailAlreadyInUseError(httpRequest.body.email)
@@ -225,7 +225,7 @@ describe("UpdateUserController", () => {
 
     const result = (await sut.execute(httpRequest)) as ErrorResponse;
 
-    expect(result.statusCode).toBe(400);
+    expect(result.statusCode).toBe(409);
     expect(result.body.message).toMatch(/already in use/i);
   });
 
