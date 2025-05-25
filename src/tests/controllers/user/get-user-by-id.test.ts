@@ -1,10 +1,10 @@
 import { faker } from "@faker-js/faker";
-import { User } from "@prisma/client";
 import { Request } from "express";
 
 import { GetUserByIdController } from "@/controllers";
 import { ErrorResponse } from "@/controllers/helpers";
 import { UserNotFoundError } from "@/errors/user";
+import { User } from "@/types";
 import { GetUserByIdUseCase } from "@/use-cases";
 
 describe("GetUserByIdController", () => {
@@ -16,10 +16,7 @@ describe("GetUserByIdController", () => {
         id: userId,
         firstName: faker.person.firstName(),
         lastName: faker.person.lastName(),
-        email: faker.internet.email(),
-        hashedPassword: faker.internet.password({
-          length: 6
-        })
+        email: faker.internet.email()
       };
     }
   }
@@ -51,8 +48,7 @@ describe("GetUserByIdController", () => {
       id: httpRequest.params.userId,
       firstName: expect.any(String),
       lastName: expect.any(String),
-      email: expect.any(String),
-      hashedPassword: expect.any(String)
+      email: expect.any(String)
     });
   });
 
