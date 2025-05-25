@@ -189,5 +189,13 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body.message).toMatch(/not found/i);
     });
+
+    it("should return 400 when user id is invalid", async () => {
+      await request(app).post("/users").send(user);
+      const response = await request(app).get(`/users/invalid-id/balance`);
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body.message).toMatch(/valid/i);
+    });
   });
 });
