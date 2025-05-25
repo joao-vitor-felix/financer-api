@@ -197,5 +197,14 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(400);
       expect(response.body.message).toMatch(/valid/i);
     });
+
+    it("should return 404 when user is not found", async () => {
+      const response = await request(app).get(`/users/${randomUUID()}/balance`);
+
+      expect(response.statusCode).toBe(404);
+      expect(response.body.message).toMatch(/not found/i);
+    });
+
+    it.todo("should return 500 when a server error happens", async () => {});
   });
 });
