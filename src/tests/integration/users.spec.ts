@@ -74,5 +74,40 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body.message).toMatch(/not found/i);
     });
+
+    it.todo("should return 500 when a server error happens", async () => {});
+  });
+
+  describe("PATCH /users/:id", () => {
+    it("should return 200 alongside updated user successfully", async () => {
+      const updateParams = {
+        firstName: "John Doe",
+        email: "john@john.com"
+      };
+
+      const { body } = await request(app).post("/users").send(user);
+      const response = await request(app)
+        .patch(`/users/${body.id}`)
+        .send(updateParams);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty("id", body.id);
+      expect(response.body).toHaveProperty("firstName", updateParams.firstName);
+      expect(response.body).toHaveProperty("email", updateParams.email);
+    });
+
+    it.todo(
+      "should return 400 when a invalid field is provided",
+      async () => {}
+    );
+
+    it.todo(
+      "should return 409 when the email is already taken",
+      async () => {}
+    );
+
+    it.todo("should return 404 when user is not found", async () => {});
+
+    it.todo("should return 500 when a server error happens", async () => {});
   });
 });
