@@ -138,4 +138,25 @@ describe("Users integration tests", () => {
 
     it.todo("should return 500 when a server error happens", async () => {});
   });
+
+  describe("GET /users/:id", () => {
+    it("should return 200 alongside user", async () => {
+      const { body } = await request(app).post("/users").send(user);
+      const response = await request(app).get(`/users/${body.id}`);
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual({
+        id: body.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email
+      });
+    });
+
+    it.todo("should return 400 when user id is invalid", async () => {});
+
+    it.todo("should return 404 when user is not found", async () => {});
+
+    it.todo("should return 500 when a server error happens", async () => {});
+  });
 });
