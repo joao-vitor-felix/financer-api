@@ -4,7 +4,6 @@ import { faker } from "@faker-js/faker";
 import request from "supertest";
 
 import { app } from "@/app";
-import { prisma } from "@/lib/client";
 
 const user = {
   firstName: faker.person.firstName(),
@@ -15,7 +14,7 @@ const user = {
   })
 };
 
-describe("Users integration tests", () => {
+describe("users integration tests", () => {
   describe("POST /users", () => {
     it("should return 201 alongside user", async () => {
       const response = await request(app).post("/users").send(user);
@@ -48,15 +47,6 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(409);
       expect(response.body.message).toMatch(/already in use/i);
     });
-
-    //FIXME: mock is causing the next test to fail
-    it.skip("should return 500 when a server error happens", async () => {
-      vi.spyOn(prisma.user, "create").mockRejectedValueOnce(new Error());
-      const response = await request(app).post("/users").send(user);
-
-      expect(response.statusCode).toBe(500);
-      expect(response.body.message).toMatch(/server error/i);
-    });
   });
 
   describe("DELETE /users/:id", () => {
@@ -74,8 +64,6 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body.message).toMatch(/not found/i);
     });
-
-    it.todo("should return 500 when a server error happens", async () => {});
   });
 
   describe("PATCH /users/:id", () => {
@@ -135,8 +123,6 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body.message).toMatch(/not found/i);
     });
-
-    it.todo("should return 500 when a server error happens", async () => {});
   });
 
   describe("GET /users/:id", () => {
@@ -167,8 +153,6 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body.message).toMatch(/not found/i);
     });
-
-    it.todo("should return 500 when a server error happens", async () => {});
   });
 
   describe("GET /users/:id/balance", () => {
@@ -204,7 +188,5 @@ describe("Users integration tests", () => {
       expect(response.statusCode).toBe(404);
       expect(response.body.message).toMatch(/not found/i);
     });
-
-    it.todo("should return 500 when a server error happens", async () => {});
   });
 });
