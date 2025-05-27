@@ -1,0 +1,8 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Financer",
+    "description": "An API for finance tracking",
+    "version": "1.0.0"
+  }
+}
